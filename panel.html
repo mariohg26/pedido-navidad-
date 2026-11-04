@@ -79,6 +79,23 @@ td .f{display:block;color:var(--muted);font-size:12.5px}
   #doc .pie{margin-top:18px;font-size:9.5pt;color:#333}
 }
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.ped .tag.mod{background:var(--chip);color:var(--pine-2)}
+.ed{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px}
+.ed .fila{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line)}
+.ed .fila .nm{flex:1;min-width:0}.ed .fila .nm small{display:block;color:var(--muted);font-size:12.5px}
+.ed .q{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.ed .q button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:18px;font-weight:700;cursor:pointer}
+.ed .q input{width:48px;height:34px;text-align:center;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:16px}
+.ed .q .u{font-size:12px;color:var(--muted);width:40px}
+.ed .x{border:0;background:none;color:var(--holly);font-size:13px;font-weight:700;cursor:pointer;padding:6px}
+.ed .fila.cero .nm{text-decoration:line-through;opacity:.6}
+.ed label{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin:12px 0 4px}
+.ed select,.ed textarea,.ed .bus{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:16px}
+.ed textarea{min-height:60px}
+.ed .res button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);padding:9px 4px;cursor:pointer;font:inherit}
+.ed .res button small{color:var(--muted)}
+.ed .aviso{font-size:12.5px;color:var(--muted);margin-top:8px}
+.ped details{margin-top:6px;font-size:13px;color:var(--muted)}.ped details ul{margin-top:4px}
 </style>
 </head>
 <body>
@@ -135,7 +152,9 @@ function imprimir(tit,quien,filas,entrega,p){
   setTimeout(()=>window.print(),150);
 }
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-let CLAVE='',PED=[];
+let CLAVE='',PED=[],CAT=[],ED=null;
+const SEMANAS=['Semana del 9 al 12 de diciembre','Semana del 14 al 19 de diciembre','Semana del 21 al 24 de diciembre'];
+fetch('catalogo.json').then(r=>r.json()).then(c=>CAT=c).catch(()=>{});
 async function rpc(fn,body){
   const r=await fetch(`${SB}/rest/v1/rpc/${fn}`,{method:'POST',headers:{'Content-Type':'application/json',apikey:SBK},body:JSON.stringify(body)});
   if(!r.ok){const t=await r.text();throw new Error(/clave incorrecta/.test(t)?'Clave incorrecta':'No se ha podido conectar. Prueba otra vez.')}
@@ -187,10 +206,13 @@ function pintar(){
   $('tped').innerHTML='<input class="buscar" id="buscar" type="search" placeholder="Buscar cliente o producto…" aria-label="Buscar pedido">'+PED.filter(p=>(!$('semana').value||p.entrega===$('semana').value)&&(!qb||norm(p.negocio+' '+p.ref+' '+(p.lineas||[]).map(l=>l.n).join(' ')).includes(qb))).map(p=>{
     const f=new Date(p.creado).toLocaleString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
     const tag=p.estado==='nuevo'?'<span class="tag nuevo">Nuevo</span>':p.estado==='anulado'?'<span class="tag anulado">Anulado</span>':'<span class="tag">Pasado a fábrica</span>';
-    return `<div class="ped ${p.estado}"><div class="top"><div><div class="neg">${esc(p.negocio)}</div><div class="meta">${esc(p.entrega)} · ${f} · Ref. ${esc(p.ref)}</div></div>${tag}</div>
+    const mod=p.editado?`<div class="meta">✏️ Modificado por ti el ${new Date(p.editado).toLocaleString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>`:'';
+    if(ED&&ED.id===p.id)return `<div class="ped ${p.estado}" data-ped="${p.id}"><div class="top"><div><div class="neg">${esc(p.negocio)}</div><div class="meta">Modificando el pedido · Ref. ${esc(p.ref)}</div></div>${tag}</div><div class="ed" id="ed">${htmlEd()}</div></div>`;
+    return `<div class="ped ${p.estado}" data-ped="${p.id}"><div class="top"><div><div class="neg">${esc(p.negocio)}</div><div class="meta">${esc(p.entrega)} · ${f} · Ref. ${esc(p.ref)}</div>${mod}</div>${tag}</div>
     <ul>${(p.lineas||[]).map(l=>`<li><b>${esc(cant(l,+l.q))}</b> · ${esc(l.n)} <span class="meta">(${esc(l.d)} · ${esc(l.m)})</span></li>`).join('')}</ul>
     ${p.obs?`<div class="obs">${esc(p.obs)}</div>`:''}
-    <div class="acts">${p.estado!=='visto'?`<button class="btn" data-id="${p.id}" data-e="visto">Marcar pasado a fábrica</button>`:`<button class="btn" data-id="${p.id}" data-e="nuevo">Volver a nuevo</button>`}
+    ${p.editado&&p.lineas_cliente?`<details><summary>Ver lo que pidió el cliente</summary><ul>${p.lineas_cliente.map(l=>`<li>${esc(cant(l,+l.q))} · ${esc(l.n)} (${esc(l.d)})</li>`).join('')}</ul></details>`:''}
+    <div class="acts">${p.estado!=='anulado'?`<button class="btn pri" data-edit="${p.id}">✏️ Modificar</button>`:''}${p.estado!=='visto'?`<button class="btn" data-id="${p.id}" data-e="visto">Marcar pasado a fábrica</button>`:`<button class="btn" data-id="${p.id}" data-e="nuevo">Volver a nuevo</button>`}
     ${p.estado!=='anulado'?`<button class="btn" data-id="${p.id}" data-e="anulado">Anular</button>`:''}<button class="btn" data-hoja="${p.id}">Hoja del pedido (PDF)</button></div></div>`}).join('')||'<p class="vacio">Todavía no hay pedidos.</p>';
 }
 $('tprov').addEventListener('click',async e=>{
@@ -224,6 +246,59 @@ $('tped').addEventListener('click',async e=>{
   if(b.dataset.e==='anulado'&&!confirm('¿Anular este pedido? Dejará de contar en los totales.'))return;
   b.disabled=true;try{await rpc('web_panel_estado',{clave:CLAVE,pedido:+b.dataset.id,nuevo_estado:b.dataset.e});await cargar()}catch(err){toast(err.message);b.disabled=false}
 });
+// ===== Modificar un pedido (cuando el cliente llama para cambiar algo) =====
+const copia=l=>({id:l.id,n:l.n,d:l.d,m:l.m,modo:l.modo,q:+l.q||0,caja:l.caja||null,peso:l.peso||null,pr:l.pr??null});
+function htmlEd(){
+  const sem=[...new Set([...SEMANAS,ED.entrega])];
+  const u=l=>l.modo==='kg'?'piezas':l.caja?'cajas':'uds';
+  return `${ED.lin.map((l,k)=>`<div class="fila${l.q?'':' cero'}" data-k="${k}"><div class="nm">${esc(l.n)}<small>${esc(l.d)} · ${esc(l.m)}${l.modo!=='kg'&&l.caja?` · caja de ${l.caja} uds`:''}</small></div>
+    <div class="q"><button type="button" data-q="-1" aria-label="Quitar uno">−</button><input inputmode="numeric" value="${l.q}" aria-label="Cantidad de ${esc(l.n)}"><button type="button" data-q="1" aria-label="Añadir uno">+</button><span class="u">${u(l)}</span></div>
+    <button type="button" class="x" data-quitar="${k}" aria-label="Quitar ${esc(l.n)}">✕</button></div>`).join('')}
+  <label for="edbus">Añadir otro producto</label>
+  <input class="bus" id="edbus" type="search" placeholder="Escribe: pollo, foie, manzana…" autocomplete="off" value="${esc(ED.bus||'')}">
+  <div class="res" id="edres">${resultados()}</div>
+  <label for="edsem">Semana de entrega</label>
+  <select id="edsem">${sem.map(s=>`<option ${s===ED.entrega?'selected':''}>${esc(s)}</option>`).join('')}</select>
+  <label for="edobs">Observaciones</label>
+  <textarea id="edobs">${esc(ED.obs||'')}</textarea>
+  <div class="acts"><button class="btn pri" type="button" id="edok">Guardar cambios</button><button class="btn" type="button" id="edno">Cancelar</button></div>
+  <p class="aviso">Los totales por proveedor se recalculan al guardar. Lo que pidió el cliente queda guardado por si lo necesitas.</p>`;
+}
+function resultados(){
+  const q=norm(ED.bus).trim();if(!q)return '';
+  const pal=q.split(/\s+/),ya=new Set(ED.lin.map(l=>l.id));
+  const r=CAT.filter(i=>!ya.has(i.id)&&pal.every(w=>norm(i.n+' '+i.d+' '+i.m).includes(w))).slice(0,8);
+  if(!CAT.length)return '<p class="aviso">No se ha podido cargar la lista de productos. Pulsa ↻ Actualizar y prueba otra vez.</p>';
+  return r.length?r.map(i=>`<button type="button" data-add="${esc(i.id)}">＋ ${esc(i.n)} <small>· ${esc(i.d)} · ${esc(i.m)}</small></button>`).join(''):'<p class="aviso">No encuentro ese producto.</p>';
+}
+function repintarEd(foco){const e=$('ed');if(!e)return;ED.bus=$('edbus')?$('edbus').value:ED.bus;ED.obs=$('edobs')?$('edobs').value:ED.obs;ED.entrega=$('edsem')?$('edsem').value:ED.entrega;
+  e.innerHTML=htmlEd();if(foco==='bus'){const b=$('edbus');b.focus();b.setSelectionRange(b.value.length,b.value.length)}}
+$('tped').addEventListener('click',async e=>{
+  const ab=e.target.closest('button[data-edit]');
+  if(ab){const p=PED.find(x=>x.id===+ab.dataset.edit);ED={id:p.id,lin:(p.lineas||[]).map(copia),entrega:p.entrega,obs:p.obs||'',bus:''};pintar();
+    document.querySelector(`[data-ped="${p.id}"]`).scrollIntoView({block:'start',behavior:'smooth'});return}
+  if(!ED||!e.target.closest('#ed'))return;
+  const f=e.target.closest('.fila'),bq=e.target.closest('button[data-q]');
+  if(bq&&f){const l=ED.lin[+f.dataset.k];l.q=Math.max(0,l.q+(+bq.dataset.q));repintarEd();return}
+  const bx=e.target.closest('button[data-quitar]');if(bx){ED.lin.splice(+bx.dataset.quitar,1);repintarEd();return}
+  const ba=e.target.closest('button[data-add]');if(ba){const i=CAT.find(c=>c.id===ba.dataset.add);ED.lin.push({...copia(i),q:1});$('edbus').value='';repintarEd();toast('Añadido: '+i.n);return}
+  if(e.target.id==='edno'){if(!confirm('¿Salir sin guardar los cambios?'))return;ED=null;pintar();return}
+  if(e.target.id==='edok'){
+    ED.obs=$('edobs').value;ED.entrega=$('edsem').value;
+    const lin=ED.lin.filter(l=>l.q>0).map(l=>({...l,uds:l.modo==='ud'&&l.caja?l.q*l.caja:null}));
+    if(!lin.length){if(confirm('Has dejado el pedido sin productos. ¿Quieres anularlo entero?')){
+      e.target.disabled=true;try{await rpc('web_panel_estado',{clave:CLAVE,pedido:ED.id,nuevo_estado:'anulado'});ED=null;await cargar();toast('Pedido anulado')}catch(err){toast(err.message);e.target.disabled=false}}return}
+    e.target.disabled=true;e.target.textContent='Guardando…';
+    try{await rpc('web_panel_editar',{clave:CLAVE,pedido:ED.id,lineas:lin,entrega:ED.entrega,obs:ED.obs});ED=null;await cargar();toast('Pedido modificado ✓')}
+    catch(err){toast(err.message);e.target.disabled=false;e.target.textContent='Guardar cambios'}
+  }
+});
+$('tped').addEventListener('input',e=>{
+  if(!ED)return;
+  if(e.target.id==='edbus'){ED.bus=e.target.value;$('edres').innerHTML=resultados();return}
+  const f=e.target.closest('#ed .fila');if(f&&e.target.tagName==='INPUT'){const v=parseInt(e.target.value,10);ED.lin[+f.dataset.k].q=isNaN(v)||v<0?0:Math.min(v,999);f.classList.toggle('cero',!ED.lin[+f.dataset.k].q)}
+});
+$('tped').addEventListener('change',e=>{if(!ED)return;if(e.target.id==='edsem')ED.entrega=e.target.value;if(e.target.id==='edobs')ED.obs=e.target.value});
 document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));$('tprov').hidden=b.dataset.t!=='prov';$('tped').hidden=b.dataset.t!=='ped'});
 $('semana').onchange=pintar;$('soloNuevos').onchange=pintar;
