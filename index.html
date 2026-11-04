@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pedido de Navidad 2026 · Quesos Maher</title>
+<meta name="description" content="Haz tu pedido de Navidad a Quesos Maher desde el móvil: pollos rellenos, patés, foie y charcutería. Te lo confirmamos por WhatsApp.">
+<meta name="theme-color" content="#103526">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quesos Maher">
+<meta property="og:title" content="Pedido de Navidad 2026 · Quesos Maher">
+<meta property="og:description" content="Pollos rellenos, patés, foie y charcutería. Pide antes del 20 de noviembre.">
+<meta property="og:image" content="https://mariohg26.github.io/pedido-navidad-/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://mariohg26.github.io/pedido-navidad-/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=Pinyon+Script&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: portada de abeto con luces y nieve, etiqueta-regalo con la fecha límite, carrusel "lo más pedido", rejilla de productos y barra de pedido fija */
+:root{
+  --snow:#f3f5f1;--card:#ffffff;--ink:#16241d;--muted:#5b6b62;--line:#dde4de;
+  --pine:#103526;--pine-2:#1a4a36;--holly:#a3232b;--holly-ink:#ffffff;--gold:#b98a2e;--gold-soft:#e9d8a6;
+  --wa:#1ea952;--wa-ink:#ffffff;--chip:#e7eee9;--sel:#fbf2dc;--plate:#ffffff;
+  --display:"Cormorant",Georgia,"Times New Roman",serif;--script:"Pinyon Script","Brush Script MT",cursive;--body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --snow:#0b1611;--card:#13221a;--ink:#e8efe9;--muted:#9fb2a6;--line:#24372c;
+  --pine:#0a2a1d;--pine-2:#123d2b;--holly:#e0656b;--holly-ink:#2a0a0c;--gold:#e2bc69;--gold-soft:#4a3d1c;
+  --wa:#25c561;--wa-ink:#06210f;--chip:#1c2f24;--sel:#2f2a16;--plate:#f4f4f1;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --snow:#0b1611;--card:#13221a;--ink:#e8efe9;--muted:#9fb2a6;--line:#24372c;
+  --pine:#0a2a1d;--pine-2:#123d2b;--holly:#e0656b;--holly-ink:#2a0a0c;--gold:#e2bc69;--gold-soft:#4a3d1c;
+  --wa:#25c561;--wa-ink:#06210f;--chip:#1c2f24;--sel:#2f2a16;--plate:#f4f4f1;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--snow);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.4;padding-bottom:104px}
+.wrap{max-width:820px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--pine)}
+
+/* portada */
+.hero{position:relative;overflow:hidden;color:#f6f1e4;background:radial-gradient(120% 90% at 50% 0%,#24583f 0%,var(--pine-2) 35%,var(--pine) 75%)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.lights{position:relative;display:block;width:100%;height:46px}
+.hero .wrap{position:relative;padding-block:4px 26px;text-align:center}
+.ribbon{display:inline-flex;align-items:center;gap:10px;background:#fff;border-radius:6px;padding:5px 10px;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.ribbon img{height:28px;width:auto;display:block}
+.hero .feliz{font-family:var(--script);font-size:46px;line-height:1;color:var(--gold-soft);margin:18px 0 -6px}
+:root .hero .feliz{color:#ecd9a2}
+.hero h1{font-family:var(--display);font-weight:700;font-size:42px;line-height:1.02;margin:0;letter-spacing:.5px;text-wrap:balance}
+.hero h1 em{font-style:normal;color:#e9c46a}
+.hero p.lead{margin:10px auto 0;max-width:46ch;color:#dfe8e1;font-size:15.5px}
+.tagrow{display:flex;justify-content:center;margin-top:22px}
+.tag{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;background:#fbf7ee;color:#1d2a22;border-radius:10px 14px 14px 10px;padding:12px 16px 12px 30px;text-align:left;max-width:460px;box-shadow:0 10px 26px rgba(0,0,0,.28);transform:rotate(-1.2deg)}
+.tag::before{content:"";position:absolute;left:11px;top:50%;width:9px;height:9px;margin-top:-4.5px;border-radius:50%;background:var(--pine);box-shadow:0 0 0 2px #d8c58f}
+.tag .d{background:#a3232b;color:#fff;border-radius:8px;text-align:center;padding:6px 10px;min-width:66px}
+.tag .d b{display:block;font-family:var(--display);font-size:34px;line-height:.95}
+.tag .d span{font-size:11px;letter-spacing:1.4px;text-transform:uppercase}
+.tag strong{display:block;font-size:16px;line-height:1.25}
+.tag small{display:block;color:#5c6a61;font-size:13px;margin-top:3px}
+.tag .cd{display:inline-block;margin-top:6px;font-size:12.5px;font-weight:700;color:#a3232b;letter-spacing:.3px}
+
+/* navegación */
+nav.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--pine);box-shadow:0 2px 10px rgba(0,0,0,.18)}
+nav.chips .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:9px;scrollbar-width:none;align-items:center}
+nav.chips .wrap::-webkit-scrollbar{display:none}
+nav.chips a,#repetir{flex:none;text-decoration:none;color:#eef3ef;border:1px solid rgba(233,196,106,.45);border-radius:16px;padding:6px 12px;font:600 13px var(--body);white-space:nowrap;background:transparent;cursor:pointer}
+nav.chips a.star{background:#e9c46a;color:#1d2a22;border-color:#e9c46a}
+
+/* secciones */
+section.sec{scroll-margin-top:60px;padding-top:6px}
+.orn{display:flex;align-items:center;gap:12px;justify-content:center;color:var(--gold);margin:30px 0 4px}
+.orn::before,.orn::after{content:"";height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,transparent,var(--gold))}
+.orn::after{background:linear-gradient(270deg,transparent,var(--gold))}
+.orn svg{width:16px;height:16px;fill:currentColor}
+section.sec h2{font-family:var(--display);font-weight:700;font-size:31px;line-height:1.05;text-align:center;margin:0;text-wrap:balance}
+section.sec .s{color:var(--muted);font-size:13.5px;text-align:center;margin:6px auto 16px;max-width:52ch}
+
+/* carrusel lo más pedido */
+.rail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:thin}
+.rail .card{flex:0 0 min(70%,240px);scroll-snap-align:start}
+
+/* rejilla */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:620px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.card.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset;background:var(--sel)}
+.ph{background:#fff;border-bottom:1px solid var(--line)}
+.ph img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.badge{position:absolute;top:10px;left:-1px;background:var(--holly);color:var(--holly-ink);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px 4px 9px;border-radius:0 12px 12px 0}
+.badge.nov{background:var(--gold);color:#1d2a22}
+.body{padding:10px 11px 11px;display:flex;flex-direction:column;gap:2px;flex:1}
+.n{font-weight:600;font-size:14.5px;line-height:1.25;overflow-wrap:anywhere}
+.f{font-size:12.5px;color:var(--muted)}
+.p{margin-top:auto;padding-top:8px;font-weight:700;color:var(--holly);font-variant-numeric:tabular-nums;font-size:16px}
+.p small{font-weight:500;color:var(--muted);font-size:12px}
+.pronto{margin-top:8px;font-size:12px;line-height:1.3;color:var(--muted);background:var(--snow);border:1px dashed var(--line);border-radius:8px;padding:7px 8px;text-align:center}
+.nota{margin:10px 0 0;font-size:13px;line-height:1.35;background:var(--sel);border:1px solid var(--gold-soft);border-radius:12px;padding:9px 12px}
+.par{display:none;margin-top:8px;font-size:12px;line-height:1.3;color:var(--ink);background:var(--sel);border:1px dashed var(--gold);border-radius:8px;padding:6px 8px}
+.card.impar .par{display:block}
+.par button{margin-left:4px;border:0;background:var(--pine-2);color:#fff;border-radius:12px;padding:3px 9px;font:700 12px var(--body);cursor:pointer}
+.line .par2{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.line .par2 button{border:0;background:none;color:var(--pine-2);font:700 12px var(--body);text-decoration:underline;padding:0;cursor:pointer}
+.cj{display:inline-block;align-self:flex-start;margin-top:4px;font-size:11.5px;font-weight:700;color:var(--ink);background:var(--chip);border-radius:6px;padding:2px 7px}
+.qty{display:flex;align-items:center;gap:5px;margin-top:8px}
+.qty button{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--snow);color:var(--ink);font:700 18px var(--body);cursor:pointer;line-height:1}
+.qty button.plus{background:var(--pine-2);color:#fff;border-color:var(--pine-2)}
+.qty input{width:100%;min-width:0;text-align:center;font:600 15px var(--body);padding:7px 2px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-variant-numeric:tabular-nums}
+.qty .u{font-size:11.5px;color:var(--muted);flex:none}
+
+.tools{margin:16px 0 2px;display:grid;gap:10px}
+.search{position:relative}
+.search svg{position:absolute;left:12px;top:50%;width:18px;height:18px;margin-top:-9px;fill:none;stroke:var(--muted);stroke-width:2}
+.search input{width:100%;font:16px var(--body);padding:11px 38px 11px 38px;border:1px solid var(--line);border-radius:24px;background:var(--card);color:var(--ink)}
+.search button{position:absolute;right:6px;top:50%;margin-top:-15px;width:30px;height:30px;border:0;border-radius:50%;background:var(--chip);color:var(--ink);font-size:16px;cursor:pointer}
+.marcas{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.marcas button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:6px 12px;font:600 13px var(--body);cursor:pointer}
+.marcas button[aria-pressed="true"]{background:var(--pine-2);border-color:var(--pine-2);color:#fff}
+.res{text-align:center;font-size:13px;color:var(--muted);min-height:1em}
+.vacio{text-align:center;color:var(--muted);padding:26px 0}
+h3.gt{font-family:var(--display);font-weight:700;font-size:23px;margin:22px 0 2px;padding-left:10px;border-left:3px solid var(--gold)}
+.gs{color:var(--muted);font-size:13px;margin:0 0 10px;padding-left:13px}
+h3.gt+.grid{margin-top:10px}
+.mk{font-size:10.5px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--gold)}
+.p.cons{color:var(--muted);font-size:14px}
+.aviso{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line);padding-top:14px;margin-top:28px;text-align:center}
+.aviso strong{color:var(--ink)}
+footer.end{color:var(--muted);font-size:12.5px;text-align:center;padding-block:14px 8px}
+footer.end .sc{font-family:var(--script);font-size:30px;color:var(--gold);display:block;margin-bottom:4px}
+
+/* barra */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--pine);color:#eef3ef;padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom,0px));box-shadow:0 -4px 16px rgba(0,0,0,.2)}
+.bar .wrap{display:flex;align-items:center;gap:12px}
+.bar .sum{flex:1;min-width:0;font-size:13px;color:#c8d6cd}
+.bar .sum b{display:block;color:#fff;font-size:16px}
+.btn-wa{border:0;background:var(--wa);color:var(--wa-ink);font:700 15px var(--body);padding:12px 18px;border-radius:24px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.btn-wa:disabled,.btn-wa.off{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+.btn-wa svg{width:18px;height:18px;fill:currentColor}
+button:focus-visible,input:focus-visible,a:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* hoja de pedido */
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(5,15,10,.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet .box{background:var(--card);width:100%;max-width:820px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;border-top:4px solid var(--holly);padding-top:16px;padding-bottom:calc(18px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sheet h2{font-family:var(--display);font-size:30px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:center}
+.sheet h2 button{border:0;background:var(--chip);color:var(--ink);border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer}
+.lines{display:grid;gap:8px;margin-bottom:12px}
+.line{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;font-size:14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.line img{width:44px;height:44px;object-fit:contain;background:var(--plate);border-radius:8px}
+.line .sm{font-size:12px;color:var(--muted)}
+.line .q{font-weight:700;white-space:nowrap;text-align:right}
+.line .x{display:block;margin-top:2px;border:0;background:none;color:var(--holly);font-size:12.5px;cursor:pointer;text-decoration:underline;padding:0;margin-left:auto}
+.upsell{background:var(--snow);border-radius:12px;padding:10px 12px;margin-bottom:12px}
+.upsell p{margin:0 0 8px;font-weight:600;font-size:14px}
+.upsell .opts{display:flex;flex-wrap:wrap;gap:6px}
+.upsell button{border:1px solid var(--pine-2);background:var(--card);color:var(--ink);border-radius:16px;padding:6px 10px;font:600 13px var(--body);cursor:pointer;text-align:left}
+label.fl{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
+.sheet input[type=text],.sheet select,.sheet textarea{width:100%;font:16px var(--body);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--snow);color:var(--ink)}
+.sheet textarea{min-height:64px;resize:vertical}
+.pop{position:fixed;inset:0;z-index:30;background:rgba(5,15,10,.55);display:grid;place-items:center;padding:20px}
+.popbox{background:var(--card);color:var(--ink);border-radius:16px;border-top:4px solid var(--holly);padding:20px 18px 18px;max-width:340px;width:100%;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.popi{width:40px;height:40px;border-radius:50%;background:var(--holly);color:var(--holly-ink);font:700 22px var(--body);display:grid;place-items:center;margin:0 auto 10px}
+.popbox strong{display:block;font-family:var(--display);font-size:24px;margin-bottom:6px}
+.popbox p{margin:0 0 14px;font-size:14.5px;color:var(--muted)}
+.popbox .btn-wa{width:100%;margin:0;background:var(--pine-2);color:#fff}
+.fine{font-size:12px;color:var(--muted);margin:10px 0 0}
+.sheet .btn-wa{width:100%;margin-top:14px;font-size:17px;padding:14px}
+.qty .add{flex:1;height:38px;border-radius:19px;border:1.5px solid var(--pine-2);background:var(--card);color:var(--ink);font:700 14px var(--body);cursor:pointer}
+.card:not(.on) .qty>:not(.add){display:none}.card.on .qty .add{display:none}
+#cat .ph,#cat .n{cursor:pointer}
+nav.chips a.act{background:#f6f1e4;color:#16241d;border-color:#f6f1e4}
+nav.chips a.star.act{background:#e9c46a;color:#1d2a22}
+.ventajas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:16px 0 0}
+.ventajas div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 8px;text-align:center;font-size:12.5px;line-height:1.25;color:var(--muted)}
+.ventajas b{display:block;color:var(--ink);font-size:13.5px;margin-bottom:2px}
+.ventajas svg{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block;margin:0 auto 5px}
+#ver .nb{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px;background:#fff;color:var(--pine);font-size:12.5px;padding:0 6px;margin-left:2px}
+#ver:disabled .nb{display:none}
+.paso{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;margin:16px 0 8px}
+.paso span{width:24px;height:24px;border-radius:50%;background:var(--pine-2);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.garan{display:flex;gap:10px;align-items:flex-start;background:var(--sel);border:1px solid var(--gold-soft);border-radius:12px;padding:10px 12px;font-size:13.5px;margin-top:4px}
+.garan svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
+.det .box{border-top-color:var(--gold)}
+.det .card{border:0;background:transparent}
+.det .card.on{box-shadow:none;background:transparent}
+.det .ph{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.det .body{padding:12px 2px 2px}
+.det .n{font-family:var(--display);font-size:27px;font-weight:700;line-height:1.1}
+.det .p{font-size:20px}
+.det .como{font-size:13.5px;color:var(--muted);background:var(--snow);border-radius:10px;padding:8px 10px;margin-top:10px}
+.det .qty{margin-top:12px}.det .qty .add{height:46px;font-size:16px;background:var(--pine-2);color:#fff}
+.det .qty button{width:44px;height:44px}
+.det .acts2{display:flex;gap:8px;margin-top:12px}
+.det .acts2 button{flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:22px;padding:11px;font:600 14px var(--body);cursor:pointer}
+.ok{position:fixed;inset:0;z-index:40;background:var(--snow);overflow:auto;display:grid;place-items:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom,0px))}
+.okbox{max-width:420px;width:100%;text-align:center}
+.okbox .chk{width:72px;height:72px;border-radius:50%;background:var(--wa);display:grid;place-items:center;margin:0 auto 14px}
+.okbox .chk svg{width:38px;height:38px;fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.okbox h2{font-family:var(--display);font-size:34px;margin:0 0 6px}
+.okbox p{color:var(--muted);margin:0 0 12px}
+.okbox .ref{display:inline-block;background:var(--card);border:1px dashed var(--gold);border-radius:10px;padding:8px 14px;font-weight:700;letter-spacing:1px;margin-bottom:16px}
+.okbox .btn-wa{width:100%;margin-bottom:10px}
+.okbox .sec2{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:24px;padding:12px;font:600 15px var(--body);cursor:pointer;margin-bottom:8px}
+@media (min-width:640px){.hero h1{font-size:56px}.hero .feliz{font-size:58px}}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:no-preference){.lights .b{animation:tw 2.4s ease-in-out infinite}.card{transition:box-shadow .15s,background .15s}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="nieve" aria-hidden="true"></canvas>
+  <svg class="lights" id="luces" aria-hidden="true"></svg>
+  <div class="wrap">
+    <div class="ribbon"><img src="img/logo.png" alt="Quesos Maher"></div>
+    <div class="feliz">Felices fiestas</div>
+    <h1>Tu pedido de <em>Navidad 2026</em></h1>
+    <p class="lead">Pollos rellenos, charcutería, patés y foie para tu carta y tu mostrador. Elige, marca las cantidades y nos llega directo por WhatsApp.</p>
+    <div class="tagrow"><div class="tag">
+      <div class="d"><span>Viernes</span><b>20</b><span>Nov</span></div>
+      <div><strong>Haz tu pedido antes del viernes 20 de noviembre</strong><small>Así lo pedimos a fábrica a tiempo y te lo servimos la semana después del puente de diciembre.</small><span class="cd" id="cd"></span></div>
+    </div></div>
+  </div>
+</header>
+
+<nav class="chips"><div class="wrap" id="chips"></div></nav>
+
+<main class="wrap">
+  <div class="ventajas">
+    <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><b>Pide antes del 20/11</b>y te lo aseguramos</div>
+    <div><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><b>Tú eliges</b>la semana de entrega</div>
+    <div><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.8 7L4 20l1.1-4.6A8 8 0 1 1 21 12z"/><path d="M9 12l2 2 4-4"/></svg><b>Te confirmamos</b>por WhatsApp</div>
+  </div>
+  <p class="nota"><b>Productos Cuit's:</b> todavía no se pueden pedir. En cuanto tengamos sus precios de este año te avisamos. Mientras, puedes pedir el resto o echar un vistazo a todo lo que tenemos.</p>
+  <div class="tools">
+    <div class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" id="q" placeholder="Busca: manzana, foie, pato, pollo…" aria-label="Buscar producto" autocomplete="off"><button id="qx" type="button" aria-label="Borrar búsqueda" hidden>×</button></div>
+    <div class="marcas" id="marcas" role="group" aria-label="Filtrar por marca"></div>
+    <div class="res" id="res" aria-live="polite"></div>
+  </div>
+  <div id="cat"></div>
+  <div class="aviso"><strong>Precios sin IVA, salvo error tipográfico.</strong> Te confirmamos precio y disponibilidad por WhatsApp. Las piezas de paté, los pollos, y la charcutería se facturan por el peso real servido. El foie, los patés pequeños y los productos de regalo se sirven por cajas completas. Los productos Cuit's se podrán pedir en cuanto tengamos su tarifa 2026: te avisaremos. ¿Se te ha pasado la fecha? Escríbenos igualmente y te decimos qué aún podemos traer.</div>
+  <footer class="end"><span class="sc">Feliz Navidad</span>Quesos Maher · Mariano Hernández Martín · Salamanca<br>Pedidos por WhatsApp: 622 853 727 · Teléfono: 629 205 222</footer>
+</main>
+
+<div class="bar"><div class="wrap">
+  <div class="sum" id="sum">Tu pedido está vacío<b>Añade productos</b></div>
+  <button class="btn-wa" id="ver" disabled>Ver mi pedido <span class="nb" id="nb">0</span></button>
+</div></div>
+
+<div class="sheet" id="sheet" hidden><div class="box" role="dialog" aria-label="Tu pedido de Navidad">
+  <h2>Tu pedido de Navidad <button id="cerrar" aria-label="Cerrar">×</button></h2>
+  <div class="paso"><span>1</span>Revisa tu pedido</div>
+  <div class="lines" id="lines"></div>
+  <div class="upsell" id="upsell" hidden><p>Para acompañar el paté:</p><div class="opts" id="ups"></div></div>
+  <div class="paso"><span>2</span>Tus datos de entrega</div>
+  <label class="fl" for="negocio">Nombre del bar, restaurante o tienda</label>
+  <input type="text" id="negocio" placeholder="Ej.: Bar La Plaza" autocomplete="organization">
+  <label class="fl" for="entrega">¿Qué semana quieres que te lo sirvamos?</label>
+  <select id="entrega">
+    <option value="" selected disabled>Elige la semana de entrega</option>
+    <option>Semana del 9 al 12 de diciembre</option>
+    <option>Semana del 14 al 19 de diciembre</option>
+    <option>Semana del 21 al 24 de diciembre</option>
+  </select>
+  <label class="fl" for="obs">Observaciones (opcional)</label>
+  <textarea id="obs" placeholder="Ej.: los pollos mejor el día 22, la tarrina de manzana en dos entregas…"></textarea>
+  <div class="paso"><span>3</span>Envíanoslo</div>
+  <a class="btn-wa" id="enviar" role="button" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 2.9 2.9 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.4 3.9c1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2s.2-1.1.1-1.2-.2-.2-.4-.3z"/></svg>Enviar por WhatsApp</a>
+  <div class="pop" id="pop" hidden role="alertdialog" aria-labelledby="popt"><div class="popbox"><div class="popi">!</div><strong id="popt">Antes de enviar tu pedido</strong><p id="popm"></p><button class="btn-wa" id="popok" type="button">Entendido</button></div></div>
+  <p class="fine">Se abrirá WhatsApp con el pedido ya escrito: solo tienes que darle a enviar. Si no se abre, escríbenos al <b>622 853 727</b>.</p>
+</div></div>
+
+<div class="sheet det" id="det" hidden><div class="box" role="dialog" aria-label="Ficha de producto" id="detbox"></div></div>
+<div class="ok" id="ok" hidden role="dialog" aria-labelledby="okt"><div class="okbox">
+  <div class="chk"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+  <h2 id="okt">¡Pedido preparado!</h2>
+  <p>Se ha abierto WhatsApp con tu pedido ya escrito. <b>Pulsa enviar en WhatsApp</b> para que nos llegue.</p>
+  <div class="ref">Ref. <span id="okref"></span></div>
+  <a class="btn-wa" id="okwa" target="_blank" rel="noopener">Abrir WhatsApp otra vez</a>
+  <button class="sec2" id="oknuevo" type="button">Hacer otro pedido</button>
+  <button class="sec2" id="okvolver" type="button">Volver a los productos</button>
+  <p style="font-size:12.5px;margin-top:8px">¿Dudas? Llámanos al 629 205 222 o escríbenos al 622 853 727.</p>
+</div></div>
+
+<script>
+const DATA=[{"id": "mesa", "t": "Para la mesa de Navidad", "s": "Pollos rellenos, pollos asados y charcutería selecta, listos para servir en fiestas.", "g": [{"t": "Pollos rellenos La Victoria", "s": "Listos para hornear y servir. Se factura por el peso real. Vienen en cajas de 2: si puedes, pide piezas pares (2, 4, 6…) y así completamos cajas. ¡Gracias!", "items": [{"n": "Pollo relleno asado", "d": "Pieza de unos 2,1 kg", "pr": 7.69, "peso": 2.1, "caja": 2, "img": "img/7353f22708.jpg", "top": "Novedad", "modo": "kg", "m": "La Victoria", "x": "El clásico, el que más se vende", "mb": "La Victoria", "id": "la-victoria-pollo-relleno-asado-pieza-de-unos-2-1-kg"}, {"n": "Pollo relleno con albaricoque y ciruelas", "d": "Pieza de unos 2,1 kg", "pr": 7.99, "peso": 2.1, "caja": 2, "img": "img/b47560862e.jpg", "top": "Novedad", "modo": "kg", "m": "La Victoria", "x": "Con fruta seca, muy de Navidad", "mb": "La Victoria", "id": "la-victoria-pollo-relleno-con-albaricoque-y-ciruelas-pieza-de-unos-2-1-kg"}, {"n": "Pollo relleno con pasas y piñones", "d": "Pieza de unos 2,1 kg", "pr": 7.99, "peso": 2.1, "caja": 2, "img": "img/fe048a50c8.jpg", "top": null, "modo": "kg", "m": "La Victoria", "x": "El relleno de toda la vida", "mb": "La Victoria", "id": "la-victoria-pollo-relleno-con-pasas-y-pinones-pieza-de-unos-2-1-kg"}, {"n": "Pollo relleno con dátiles y queso", "d": "Pieza de unos 2,1 kg", "pr": 7.99, "peso": 2.1, "caja": 2, "img": "img/fd92ef0722.jpg", "top": null, "modo": "kg", "m": "La Victoria", "x": "Dulce y salado, para mesas de fiesta", "mb": "La Victoria", "id": "la-victoria-pollo-relleno-con-datiles-y-queso-pieza-de-unos-2-1-kg"}, {"n": "Pollo relleno con nueces y queso", "d": "Pieza de unos 2,1 kg", "pr": 7.99, "peso": 2.1, "caja": 2, "img": "img/62486b239a.jpg", "top": null, "modo": "kg", "m": "La Victoria", "x": "Frutos secos y queso", "mb": "La Victoria", "id": "la-victoria-pollo-relleno-con-nueces-y-queso-pieza-de-unos-2-1-kg"}, {"n": "Pollo relleno con huevo y jamón", "d": "Pieza de unos 2,1 kg", "pr": 9.25, "peso": 2.1, "caja": 2, "img": "img/288c35de12.jpg", "top": null, "modo": "kg", "m": "La Victoria", "x": "Relleno de huevo y jamón", "mb": "La Victoria", "id": "la-victoria-pollo-relleno-con-huevo-y-jamon-pieza-de-unos-2-1-kg"}]}, {"t": "Pollos asados al horno Cuit's", "s": "Pieza de 1,5 kg. Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Pollo asado campesino", "d": "Con pimiento, aceituna y huevo · pieza 1,5 kg", "pr": null, "peso": 1.5, "caja": null, "img": "img/38297df15c.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pollo-asado-campesino-con-pimiento-aceituna-y-huevo-pieza-1-5-kg"}, {"n": "Pollo asado a la antigua", "d": "Con setas silvestres y uvas pasas · pieza 1,5 kg", "pr": null, "peso": 1.5, "caja": null, "img": "img/aad6e1ae5a.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pollo-asado-a-la-antigua-con-setas-silvestres-y-uvas-pasas-pieza-1-5-kg"}]}, {"t": "Charcutería selecta Cuit's", "s": "Piezas grandes para cortar y servir. Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Pato a la naranja", "d": "Pieza 3 kg", "pr": null, "peso": 3, "caja": null, "img": "img/a821ce72eb.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pato-a-la-naranja-pieza-3-kg"}, {"n": "Silueta de pato", "d": "Pieza 2,5 kg", "pr": null, "peso": 2.5, "caja": null, "img": "img/a88ccbc6b9.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-silueta-de-pato-pieza-2-5-kg"}, {"n": "Ave al nido", "d": "Pieza 2,5 kg", "pr": null, "peso": 2.5, "caja": null, "img": "img/80a9a2199c.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-ave-al-nido-pieza-2-5-kg"}, {"n": "Pollo relleno braseado", "d": "Pieza 2,5 kg", "pr": null, "peso": 2.5, "caja": null, "img": "img/9e2b765033.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pollo-relleno-braseado-pieza-2-5-kg"}, {"n": "Paupiette de lomo", "d": "Pieza 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/5e262bacbc.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-paupiette-de-lomo-pieza-2-kg"}, {"n": "Cochinillo moldeado", "d": "Pieza 3 kg", "pr": null, "peso": 3, "caja": null, "img": "img/60441dd64f.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-cochinillo-moldeado-pieza-3-kg"}]}]}, {"id": "piezas", "t": "Patés en pieza para cortar", "s": "Para hostelería y mostrador. Precio por kilo; se factura por el peso real de la pieza.", "g": [{"t": "Capdevila", "s": null, "items": [{"n": "Paté de manzana", "d": "Tarrina de cerámica 1,5 kg", "pr": 15.99, "peso": 1.5, "caja": null, "img": "img/5b8fd59d44.jpg", "top": "El más pedido", "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-manzana-tarrina-de-ceramica-1-5-kg"}, {"n": "Paté de manzana", "d": "Plato de cerámica 2 kg", "pr": 16.05, "peso": 2, "caja": null, "img": "img/ad4889a810.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-manzana-plato-de-ceramica-2-kg"}, {"n": "Paté de manzana", "d": "Bandeja 1,5 kg", "pr": 14.22, "peso": 1.5, "caja": null, "img": "img/7421b97906.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-manzana-bandeja-1-5-kg"}, {"n": "Paté de pato al Oporto", "d": "Plato de cerámica 2 kg", "pr": 14.7, "peso": 2, "caja": null, "img": "img/cf480b8de7.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-pato-al-oporto-plato-de-ceramica-2-kg"}, {"n": "Paté a la pimienta verde", "d": "Plato de cerámica 2 kg", "pr": 14.7, "peso": 2, "caja": null, "img": "img/d36ee502b5.jpg", "top": "Muy pedido", "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-a-la-pimienta-verde-plato-de-ceramica-2-kg"}, {"n": "Paté a las finas hierbas", "d": "Plato de cerámica 2 kg", "pr": 14.7, "peso": 2, "caja": null, "img": "img/742ea848fd.jpg", "top": "Muy pedido", "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-a-las-finas-hierbas-plato-de-ceramica-2-kg"}, {"n": "Paté a la pimienta negra", "d": "Plato 2 kg", "pr": 14.7, "peso": 2, "caja": null, "img": "img/b96dff4594.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-a-la-pimienta-negra-plato-2-kg"}, {"n": "Paté a la pimienta negra", "d": "Bandeja 1,5 kg", "pr": 13.87, "peso": 1.5, "caja": null, "img": "img/4def13f0c6.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-a-la-pimienta-negra-bandeja-1-5-kg"}, {"n": "Paté de arándanos", "d": "Plato 2 kg", "pr": 14.7, "peso": 2, "caja": null, "img": "img/461befacf7.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-arandanos-plato-2-kg"}, {"n": "Paté de arándanos", "d": "Bandeja 1,5 kg", "pr": 14.22, "peso": 1.5, "caja": null, "img": "img/8ba994e87e.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-arandanos-bandeja-1-5-kg"}, {"n": "Paté con champiñones", "d": "Plato 2 kg", "pr": 14.7, "peso": 2, "caja": null, "img": "img/8571d7d91e.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-con-champinones-plato-2-kg"}, {"n": "Paté de pato a la naranja", "d": "Bandeja 1,5 kg", "pr": 14.22, "peso": 1.5, "caja": null, "img": "img/a6ff4cff51.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-pato-a-la-naranja-bandeja-1-5-kg"}, {"n": "Mousse au champagne", "d": "Cerámica 1,8 kg", "pr": 22.2, "peso": 1.8, "caja": null, "img": "img/c453804b9f.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-mousse-au-champagne-ceramica-1-8-kg"}, {"n": "Paté crema fina de arándanos Grand-Mère", "d": "Tarrina 1,7 kg", "pr": 19.74, "peso": 1.7, "caja": null, "img": "img/3d92191098.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-crema-fina-de-arandanos-grand-mere-tarrina-1-7-kg"}, {"n": "Rulo mousse de pato 100 % grasa amarilla", "d": "Rulo 750 g", "pr": 18.41, "peso": 0.75, "caja": null, "img": "img/afa0ef08a5.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-rulo-mousse-de-pato-100-grasa-amarilla-rulo-750-g"}, {"n": "Rulo mousse de pato con grasa amarilla", "d": "Rulo 1 kg", "pr": 16.69, "peso": 1, "caja": null, "img": "img/5590f70233.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-rulo-mousse-de-pato-con-grasa-amarilla-rulo-1-kg"}, {"n": "Rulo mousse de pato a la pimienta negra", "d": "Rulo 1 kg", "pr": 14.36, "peso": 1, "caja": null, "img": "img/a20aac27c5.jpg", "top": null, "modo": "kg", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-rulo-mousse-de-pato-a-la-pimienta-negra-rulo-1-kg"}]}, {"t": "Pasteles de paté Cuit's", "s": "Pieza de 2 kg. Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Paté a las setas silvestres", "d": "Pastel 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/295b7afbeb.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-a-las-setas-silvestres-pastel-2-kg"}, {"n": "Paté con cebolla caramelizada", "d": "Pastel 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/07e909bd1b.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-con-cebolla-caramelizada-pastel-2-kg"}, {"n": "Paté a la pimienta negra", "d": "Pastel 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/c94000eb2e.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-a-la-pimienta-negra-pastel-2-kg"}, {"n": "Paté de pato con pera", "d": "Pastel 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/3c50fe38fc.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-de-pato-con-pera-pastel-2-kg"}, {"n": "Paté a las finas hierbas", "d": "Pastel 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/3f1d88eb7a.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-a-las-finas-hierbas-pastel-2-kg"}, {"n": "Paté con arándanos", "d": "Pastel 2 kg", "pr": null, "peso": 2, "caja": null, "img": "img/23dab35739.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-con-arandanos-pastel-2-kg"}]}, {"t": "Tarrinas y lingote Cuit's", "s": "Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Mousse de pato", "d": "Tarrina 1,4 kg", "pr": null, "peso": 1.4, "caja": null, "img": "img/d1d2ca34a5.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-tarrina-1-4-kg"}, {"n": "Paté al Roquefort", "d": "Tarrina 1,4 kg", "pr": null, "peso": 1.4, "caja": null, "img": "img/38f84399e4.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-al-roquefort-tarrina-1-4-kg"}, {"n": "Lingote Oro de mousse de pato con ciruelas y orejones", "d": "Lingote 1 kg", "pr": null, "peso": 1, "caja": null, "img": "img/725095d7c4.jpg", "top": null, "modo": "kg", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-lingote-oro-de-mousse-de-pato-con-ciruelas-y-orejones-lingote-1-kg"}]}]}, {"id": "tienda", "t": "Foie y patés para tienda", "s": "Formatos pequeños para vender en el mostrador. Precio por unidad.", "g": [{"t": "Capdevila", "s": "Se sirven por cajas completas: el número que marcas son cajas.", "items": [{"n": "Bloc de foie gras de pato", "d": "Tarrina 100 g", "pr": 4.84, "peso": null, "caja": 8, "img": "img/da1204d1f8.jpg", "top": "El más pedido", "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-gras-de-pato-tarrina-100-g"}, {"n": "Bloc de foie gras de pato", "d": "40 g", "pr": 2.54, "peso": null, "caja": 8, "img": "img/7e9325de1e.jpg", "top": "Muy pedido", "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-gras-de-pato-40-g"}, {"n": "Bloc de foie gras de pato con trufa", "d": "40 g", "pr": 2.54, "peso": null, "caja": 8, "img": "img/1dbdbd70e4.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-gras-de-pato-con-trufa-40-g"}, {"n": "Dúo bloc de foie gras de pato", "d": "80 g (2 × 40 g)", "pr": 4.91, "peso": null, "caja": 8, "img": "img/3c6ad2425a.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-duo-bloc-de-foie-gras-de-pato-80-g-2-40-g"}, {"n": "Bloc de foie gras de pato", "d": "Lata 135 g", "pr": 6.47, "peso": null, "caja": 8, "img": "img/cec25c841f.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-gras-de-pato-lata-135-g"}, {"n": "Bloc de foie gras de pato con trufa", "d": "Lata 135 g", "pr": 6.71, "peso": null, "caja": 8, "img": "img/f7128b9eb3.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-gras-de-pato-con-trufa-lata-135-g"}, {"n": "Foie gras entero de pato", "d": "Tarro de cristal 125 g", "pr": 11.92, "peso": null, "caja": 6, "img": "img/b130ad8358.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-foie-gras-entero-de-pato-tarro-de-cristal-125-g"}, {"n": "Mousse de foie gras de pato", "d": "40 g", "pr": 1.98, "peso": null, "caja": 8, "img": "img/f8cd0533ee.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-mousse-de-foie-gras-de-pato-40-g"}, {"n": "Mousse de foie gras de pato a la brasa", "d": "40 g", "pr": 1.98, "peso": null, "caja": 8, "img": "img/e79696dc3f.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-mousse-de-foie-gras-de-pato-a-la-brasa-40-g"}, {"n": "Mousse de foie gras de pato con trufa", "d": "40 g", "pr": 1.98, "peso": null, "caja": 8, "img": "img/5d694ad33b.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-mousse-de-foie-gras-de-pato-con-trufa-40-g"}, {"n": "Paté de pato al Oporto", "d": "D-shape 55 g", "pr": 0.98, "peso": null, "caja": 10, "img": "img/53d48bb507.jpg", "top": "Muy pedido", "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-pato-al-oporto-d-shape-55-g"}, {"n": "Paté a la pimienta verde", "d": "D-shape 55 g", "pr": 0.98, "peso": null, "caja": 10, "img": "img/3af963e75d.jpg", "top": "Muy pedido", "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-a-la-pimienta-verde-d-shape-55-g"}, {"n": "Paté a las finas hierbas", "d": "D-shape 55 g", "pr": 0.98, "peso": null, "caja": 10, "img": "img/f3af82fcc8.jpg", "top": "Muy pedido", "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-a-las-finas-hierbas-d-shape-55-g"}, {"n": "Paté de cebolla caramelizada", "d": "D-shape 55 g", "pr": 0.98, "peso": null, "caja": 10, "img": "img/96b0f40334.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-de-cebolla-caramelizada-d-shape-55-g"}, {"n": "Paté con trufa", "d": "D-shape 55 g", "pr": 1.13, "peso": null, "caja": 10, "img": "img/9286df42e5.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pate-con-trufa-d-shape-55-g"}]}, {"t": "Patés fileteados Cuit's", "s": "Envase de 125 g. Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Paté fileteado a la pimienta negra", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e2d8ed4d75.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-fileteado-a-la-pimienta-negra-125-g"}, {"n": "Paté fileteado a las finas hierbas", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e2d8ed4d75.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-fileteado-a-las-finas-hierbas-125-g"}, {"n": "Paté fileteado con boletus", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e2d8ed4d75.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-fileteado-con-boletus-125-g"}, {"n": "Paté fileteado con jamón serrano", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e2d8ed4d75.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-fileteado-con-jamon-serrano-125-g"}, {"n": "Paté fileteado con cebolla caramelizada", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e2d8ed4d75.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-fileteado-con-cebolla-caramelizada-125-g"}, {"n": "Paté fileteado con arándanos", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e2d8ed4d75.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-pate-fileteado-con-arandanos-125-g"}]}, {"t": "Mousses de pato fileteadas Cuit's", "s": "Envase de 125 g. Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Mousse de pato fileteada", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-fileteada-125-g"}, {"n": "Mousse de pato a la pimienta negra", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-a-la-pimienta-negra-125-g"}, {"n": "Mousse de pato a las finas hierbas", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-a-las-finas-hierbas-125-g"}, {"n": "Mousse de pato a la naranja", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-a-la-naranja-125-g"}, {"n": "Mousse de pato con manzana", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-con-manzana-125-g"}, {"n": "Mousse de pato con higos", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-con-higos-125-g"}, {"n": "Mousse de pato con frambuesa", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-con-frambuesa-125-g"}, {"n": "Mousse de pato con ciruelas y orejones", "d": "125 g", "pr": null, "peso": null, "caja": null, "img": "img/e84e0e05ae.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-mousse-de-pato-con-ciruelas-y-orejones-125-g"}]}, {"t": "Bombones de mousse Cuit's", "s": "Pieza de 180 g. Aún sin precio 2026: en cuanto lo tengamos te avisamos para que puedas pedirlo.", "items": [{"n": "Bombón Oro de mousse de pato relleno de higos", "d": "180 g", "pr": null, "peso": null, "caja": null, "img": "img/ea38dab4ef.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-bombon-oro-de-mousse-de-pato-relleno-de-higos-180-g"}, {"n": "Bombón de mousse de pato con manzana", "d": "180 g", "pr": null, "peso": null, "caja": null, "img": "img/2a164263c6.jpg", "top": null, "modo": "ud", "m": "Cuit's", "x": null, "mb": "Cuit's", "id": "cuit-s-bombon-de-mousse-de-pato-con-manzana-180-g"}]}]}, {"id": "regalo", "t": "Regalo gourmet", "s": "Detalles para cestas, mostrador y regalos de empresa.", "g": [{"t": "Capdevila", "s": "Se sirven por cajas completas: el número que marcas son cajas.", "items": [{"n": "Bloc de foie de pato + botellita de Pedro Ximénez", "d": "65 g", "pr": 4.34, "peso": null, "caja": 10, "img": "img/6661f11f5d.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-de-pato-botellita-de-pedro-ximenez-65-g"}, {"n": "Bloc de foie de pato + botellita de ratafía", "d": "65 g", "pr": 4.34, "peso": null, "caja": 10, "img": "img/b0098c470d.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-de-pato-botellita-de-ratafia-65-g"}, {"n": "Bloc de foie de pato + lira + botellita de PX", "d": "135 g", "pr": 8.63, "peso": null, "caja": 8, "img": "img/17b93ca5cd.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-bloc-de-foie-de-pato-lira-botellita-de-px-135-g"}, {"n": "Pack gourmet: bloc de foie + cono + caramelo", "d": "67 g", "pr": 5.92, "peso": null, "caja": 5, "img": "img/022a2399c8.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-pack-gourmet-bloc-de-foie-cono-caramelo-67-g"}, {"n": "Crema balsámica de Pedro Ximénez", "d": "Botella 180 ml", "pr": 4.62, "peso": null, "caja": 6, "img": "img/20b7f79fbe.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-crema-balsamica-de-pedro-ximenez-botella-180-ml"}, {"n": "Tostas con pasas", "d": "Bolsa 100 g", "pr": 1.86, "peso": null, "caja": 14, "img": "img/040e01b1c6.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-tostas-con-pasas-bolsa-100-g"}, {"n": "Tostas con pasas", "d": "Caja 100 g", "pr": 2.31, "peso": null, "caja": 8, "img": "img/ffa9e96a39.jpg", "top": null, "modo": "ud", "m": "Capdevila", "x": null, "mb": "Capdevila", "id": "capdevila-tostas-con-pasas-caja-100-g"}]}]}];
+const TEL='34622853727';
+// cada pedido se guarda también en la base de datos de pedidos (Supabase) para el panel de Mario
+const SB='https://ibxctgusajrpjhvvxeiq.supabase.co',SBK='sb_publishable_zGZx3EHAH6Xu62EYzlhJFQ_MsZ5304j';
+const items=[];const cart={};
+const eur=x=>x.toLocaleString('es-ES',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+const fq=x=>String(+x.toFixed(2)).replace('.',',');
+const num=s=>parseFloat(String(s).replace(',','.'))||0;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const porCaja=i=>i.modo==='ud'&&i.caja;
+const plural=(i,q)=>i.modo==='kg'?(q===1?'pieza':'piezas'):porCaja(i)?(q===1?'caja':'cajas'):(q===1?'ud':'uds');
+const cant=(i,q)=>porCaja(i)?`${q} ${plural(i,q)} de ${i.caja} uds (${q*i.caja} uds)`:`${q} ${plural(i,q)}`;
+const norm=t=>String(t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+const precioTxt=i=>i.pr==null?'precio a consultar':`${eur(i.pr)}/${i.modo==='kg'?'kg':'ud'}`;
+const STAR='<svg viewBox="0 0 24 24"><path d="M12 1l2.6 8.4H23l-6.8 5 2.6 8.4L12 17.8l-6.8 5 2.6-8.4L1 9.4h8.4z"/></svg>';
+
+DATA.forEach(s=>s.g.forEach(g=>g.items.forEach(i=>{i.k=items.length;i.txt=norm([i.n,i.d,i.x,i.m,i.mb,g.t,s.t].join(' '));items.push(i)})));
+
+function card(i){
+  const precio=i.pr==null?'<div class="p cons">Precio en camino</div>':`<div class="p">${eur(i.pr)} <small>/${i.modo==='kg'?'kg':'ud'}</small></div>`;
+  if(i.pr==null)return `<div class="card" data-k="${i.k}"><div class="ph"><img loading="lazy" src="${i.img}" alt="${esc(i.n)}"></div>
+  <div class="body"><div class="mk">${esc(i.mb)}</div><div class="n">${esc(i.n)}</div>${i.x?`<div class="f">${esc(i.x)}</div>`:''}<div class="f">${esc(i.d)}</div>
+  ${precio}<div class="pronto">Te avisamos cuando tenga precio</div></div></div>`;
+  const cajaTxt=porCaja(i)?`<div class="cj">Caja de ${i.caja} uds</div>`:i.modo==='kg'&&i.caja?`<div class="cj">Caja de ${i.caja} piezas</div>`:'';
+  const badge=i.top?`<span class="badge ${i.top==='Novedad'?'nov':''}">${esc(i.top)}</span>`:'';
+  return `<div class="card" data-k="${i.k}">${badge}<div class="ph"><img loading="lazy" src="${i.img}" alt="${esc(i.n)}"></div>
+  <div class="body"><div class="mk">${esc(i.mb)}</div><div class="n">${esc(i.n)}</div>${i.x?`<div class="f">${esc(i.x)}</div>`:''}<div class="f">${esc(i.d)}</div>
+  ${precio}${cajaTxt}
+  <div class="qty"><button class="add" type="button">Añadir</button><button class="minus" aria-label="Quitar uno">−</button><input class="qin" inputmode="numeric" placeholder="0" aria-label="Cantidad de ${esc(i.n)}"><button class="plus" aria-label="Añadir uno">+</button><span class="u">${i.modo==='kg'?'piezas':porCaja(i)?'cajas':'uds'}</span></div>${parTxt(i)}</div></div>`;
+}
+// pollos en cajas de 2: recomendación amable de pedir piezas pares, nunca obligatoria
+const completa=i=>i.modo==='kg'&&i.caja>1;
+const parTxt=i=>completa(i)?`<div class="par">Vienen en cajas de ${i.caja}. Si te animas con otra, completas la caja. ¡Gracias! <button class="comp" type="button">+1</button></div>`:'';
+const head=(t,s)=>`<div class="orn">${STAR}</div><h2>${esc(t)}</h2><p class="s">${esc(s)}</p>`;
+const tops=items.filter(i=>i.top);
+let html=`<section class="sec" id="mas">${head('Lo más pedido en Navidad','Lo que más nos pedisteis el año pasado y las novedades de este año. Desliza para ver más.')}<div class="rail">${tops.map(card).join('')}</div></section>`;
+let chips=`<a href="#mas" class="star">★ Lo más pedido</a>`;
+DATA.forEach(s=>{
+  html+=`<section class="sec" id="${s.id}">${head(s.t,s.s)}${s.g.map(g=>`<div class="grp"><h3 class="gt">${esc(g.t)}</h3>${g.s?`<p class="gs">${esc(g.s)}</p>`:''}<div class="grid">${g.items.map(card).join('')}</div></div>`).join('')}</section>`;
+  chips+=`<a href="#${s.id}">${esc(s.t)}</a>`;
+});
+html+='<p class="vacio" id="vacio" hidden>No encontramos ese producto. Prueba con otra palabra o escríbenos por WhatsApp.</p>';
+document.getElementById('cat').innerHTML=html;
+
+// buscador y filtro por marca
+const MARCAS=['Todas',...new Set(items.map(i=>i.m))];let marca='Todas';
+const mk=document.getElementById('marcas');
+mk.innerHTML=MARCAS.map(m=>`<button type="button" data-m="${esc(m)}" aria-pressed="${m==='Todas'}">${esc(m)}</button>`).join('');
+function filtrar(){
+  const q=norm(document.getElementById('q').value.trim()),pal=q.split(/\s+/).filter(Boolean),activo=pal.length||marca!=='Todas';
+  document.getElementById('qx').hidden=!q;
+  let n=0;
+  document.querySelectorAll('#cat .grid .card').forEach(c=>{const i=items[c.dataset.k];const ok=(marca==='Todas'||i.m===marca)&&pal.every(p=>i.txt.includes(p));c.hidden=!ok;if(ok)n++});
+  document.querySelectorAll('#cat .grp').forEach(g=>g.hidden=!g.querySelector('.card:not([hidden])'));
+  document.querySelectorAll('#cat section.sec').forEach(s=>{if(s.id==='mas')s.hidden=activo;else s.hidden=!s.querySelector('.card:not([hidden])')});
+  document.getElementById('vacio').hidden=n>0;
+  document.getElementById('res').textContent=activo?(n?`${n} producto${n>1?'s':''}`:''):'';
+}
+mk.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;marca=b.dataset.m;mk.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));filtrar()});
+document.getElementById('q').addEventListener('input',filtrar);
+document.getElementById('qx').onclick=()=>{const q=document.getElementById('q');q.value='';filtrar();q.focus()};
+document.getElementById('chips').innerHTML=chips+'<button id="repetir" hidden>↻ Repetir mi último pedido</button>';
+
+function setQ(k,v,from){
+  v=Math.max(0,Math.round(v));if(items[k].pr==null&&v>0)return;
+  if(v>0)cart[k]=v;else delete cart[k];
+  document.querySelectorAll(`.card[data-k="${k}"]`).forEach(r=>{r.classList.toggle('on',v>0);r.classList.toggle('impar',completa(items[k])&&v%items[k].caja!==0);const inp=r.querySelector('.qin');if(inp!==from)inp.value=v>0?v:''});
+  refresh();
+}
+function refresh(){
+  const ks=Object.keys(cart),n=ks.length;
+  document.getElementById('sum').innerHTML=n?`Tu pedido de Navidad<b>${n} producto${n>1?'s':''}</b>`:'Tu pedido está vacío<b>Añade productos</b>';
+  document.getElementById('ver').disabled=!n;document.getElementById('nb').textContent=n;
+  const bo={};Object.entries(cart).forEach(([k,q])=>bo[items[k].id]=q);store.set('maher_nav_borrador2',bo);
+}
+const cat=document.getElementById('cat');
+// botones de cantidad (en la lista y en la ficha de producto)
+document.addEventListener('click',e=>{const b=e.target.closest('.card .qty button');if(!b)return;const k=+b.closest('.card').dataset.k;setQ(k,b.classList.contains('add')?1:(cart[k]||0)+(b.classList.contains('plus')?1:-1))});
+document.addEventListener('click',e=>{const b=e.target.closest('.comp');if(!b)return;const k=+b.dataset.k||+b.closest('[data-k]').dataset.k,i=items[k],q=cart[k]||0;setQ(k,q+(i.caja-q%i.caja));if(!sheet.hidden)drawSheet()});
+document.addEventListener('input',e=>{if(!e.target.matches('.card .qin'))return;setQ(+e.target.closest('.card').dataset.k,num(e.target.value),e.target)});
+// ficha de producto con foto grande
+const det=document.getElementById('det');
+function como(i){
+  if(i.modo==='kg')return `Precio por kilo. Pides por piezas${i.peso?` de unos ${fq(i.peso)} kg`:''} y se factura por el peso real servido.${i.caja?` Se sirve en cajas de ${i.caja} piezas.`:''}`;
+  if(porCaja(i))return `Precio por unidad. Se sirve en cajas completas de ${i.caja} uds: cada vez que pulsas + añades una caja.`;
+  return 'Se sirve por cajas completas: te confirmamos cuántas unidades lleva cada caja.';
+}
+function abrirFicha(k){
+  const i=items[k],q=cart[k]||0;
+  if(i.pr==null){document.getElementById('detbox').innerHTML=`<div class="card" data-k="${k}"><div class="ph"><img src="${i.img}" alt="${esc(i.n)}"></div><div class="body">
+    <div class="mk">${esc(i.mb)}</div><div class="n">${esc(i.n)}</div>${i.x?`<div class="f">${esc(i.x)}</div>`:''}<div class="f">${esc(i.d)}</div><div class="p cons">Precio en camino</div>
+    <div class="como">Todavía no se puede pedir. En cuanto tengamos el precio de este año te avisamos para que puedas hacer tu pedido.</div>
+    <div class="acts2"><button type="button" id="detseguir">Seguir viendo</button></div></div></div>`;det.hidden=false;return}
+  const precio=i.pr==null?'<div class="p cons">Precio a consultar</div>':`<div class="p">${eur(i.pr)} <small>/${i.modo==='kg'?'kg':'ud'} + IVA</small></div>`;
+  document.getElementById('detbox').innerHTML=`<div class="card ${q?'on':''}" data-k="${k}"><div class="ph"><img src="${i.img}" alt="${esc(i.n)}"></div><div class="body">
+    <div class="mk">${esc(i.mb)}</div><div class="n">${esc(i.n)}</div>${i.x?`<div class="f">${esc(i.x)}</div>`:''}<div class="f">${esc(i.d)}</div>${precio}
+    <div class="como">${como(i)}</div>
+    <div class="qty"><button class="add" type="button">Añadir al pedido</button><button class="minus" aria-label="Quitar uno">−</button><input class="qin" inputmode="numeric" placeholder="0" value="${q||''}" aria-label="Cantidad de ${esc(i.n)}"><button class="plus" aria-label="Añadir uno">+</button><span class="u">${i.modo==='kg'?'piezas':porCaja(i)?'cajas':'uds'}</span></div>${parTxt(i)}
+    <div class="acts2"><button type="button" id="detseguir">Seguir viendo</button><button type="button" id="detver">Ver mi pedido</button></div></div></div>`;
+  det.hidden=false;
+}
+cat.addEventListener('click',e=>{const t=e.target.closest('.ph,.n');if(!t)return;abrirFicha(+t.closest('.card').dataset.k)});
+det.addEventListener('click',e=>{if(e.target===det||e.target.id==='detseguir')det.hidden=true;if(e.target.id==='detver'){det.hidden=true;if(Object.keys(cart).length)document.getElementById('ver').click()}});
+
+const sheet=document.getElementById('sheet');
+const UPS=[['Tostas con pasas','Bolsa 100 g'],['Crema balsámica de Pedro Ximénez','Botella 180 ml'],['Paté de pato al Oporto','D-shape 55 g']];
+const fmt=i=>i.d;
+function drawSheet(){
+  document.getElementById('lines').innerHTML=Object.keys(cart).map(k=>{const i=items[k],q=cart[k];
+    const pr=precioTxt(i);
+    return `<div class="line"><img src="${i.img}" alt=""><div>${esc(i.n)}<div class="sm">${esc(fmt(i))} · ${pr}</div></div><div class="q">${q} ${plural(i,q)}${porCaja(i)?`<div class="sm">${q*i.caja} uds</div>`:''}${completa(i)&&q%i.caja?`<span class="par2">caja de ${i.caja} · <button class="comp" data-k="${k}" type="button">completar</button></span>`:''}<button class="x" data-k="${k}">quitar</button></div></div>`}).join('');
+  const hayPate=Object.keys(cart).some(k=>/paté|foie|mousse|rulo/i.test(items[k].n));
+  const ups=hayPate?UPS.map(([n,d])=>items.find(i=>i.n===n&&i.d===d)).filter(i=>i&&!cart[i.k]):[];
+  document.getElementById('upsell').hidden=!ups.length;
+  document.getElementById('ups').innerHTML=ups.map(i=>`<button data-k="${i.k}">+ ${esc(i.n)} · ${esc(i.d)}</button>`).join('');
+  buildLink();
+}
+// referencia del pedido: se mantiene 3 horas para que, si el cliente lo corrige y reenvía, se actualice el mismo pedido
+function refPedido(){
+  const r=store.get('maher_nav_ref');if(r&&Date.now()-r.t<3*36e5)return r.ref;
+  const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let x='';const rnd=new Uint32Array(8);(window.crypto||{getRandomValues:a=>a.map(()=>Math.random()*4e9)}).getRandomValues(rnd);rnd.forEach(v=>x+=A[v%A.length]);
+  return x;
+}
+let REF=refPedido();
+function guardar(){
+  const lineas=Object.keys(cart).map(k=>{const i=items[k],q=cart[k];return {id:i.id,n:i.n,d:i.d,m:i.m,modo:i.modo,q,caja:i.caja||null,uds:porCaja(i)?q*i.caja:null,peso:i.peso||null,pr:i.pr}});
+  const p={ref:REF,negocio:document.getElementById('negocio').value.trim(),entrega:document.getElementById('entrega').value,obs:document.getElementById('obs').value.trim(),lineas};
+  store.set('maher_nav_ref',{ref:REF,t:Date.now()});
+  try{fetch(SB+'/rest/v1/rpc/web_guardar_pedido',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json',apikey:SBK},body:JSON.stringify({p})}).catch(()=>{})}catch(e){}
+}
+function mensaje(){
+  const neg=document.getElementById('negocio').value.trim();
+  const L=['*PEDIDO DE NAVIDAD - QUESOS MAHER*','Ref.: '+REF,'Cliente: '+(neg||'(sin nombre)'),'Entrega: '+document.getElementById('entrega').value,''];
+  Object.keys(cart).forEach(k=>{const i=items[k],q=cart[k];L.push(`• ${cant(i,q)} - ${i.n} (${fmt(i)})`)});
+  const obs=document.getElementById('obs').value.trim(); if(obs)L.push('','Observaciones: '+obs);
+  return L.join('\n');
+}
+function buildLink(){const b=document.getElementById('enviar');if(!(document.getElementById('negocio').value.trim()&&document.getElementById('entrega').value)){b.removeAttribute('href');return}b.href='https://wa.me/'+TEL+'?text='+encodeURIComponent(mensaje())}
+document.getElementById('ver').onclick=()=>{drawSheet();check();sheet.hidden=false};
+document.getElementById('cerrar').onclick=()=>sheet.hidden=true;
+sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.hidden=true});
+document.getElementById('pop').addEventListener('click',e=>{if(e.target.id==='pop')document.getElementById('popok').click()});
+document.getElementById('lines').addEventListener('click',e=>{const b=e.target.closest('.x');if(!b)return;setQ(+b.dataset.k,0);if(!Object.keys(cart).length)sheet.hidden=true;else drawSheet()});
+document.getElementById('ups').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;setQ(+b.dataset.k,1);drawSheet()});
+const listo=()=>document.getElementById('negocio').value.trim()&&document.getElementById('entrega').value;
+function check(){}
+let foco=null;
+function aviso(){const n=document.getElementById('negocio').value.trim(),s=document.getElementById('entrega').value;
+  const falta=[!n&&'el <b>nombre de tu negocio</b>',!s&&'la <b>semana de entrega</b>'].filter(Boolean);
+  document.getElementById('popm').innerHTML='Para enviarlo tienes que poner '+falta.join(' y ')+'.';
+  foco=document.getElementById(n?'entrega':'negocio');document.getElementById('pop').hidden=false;document.getElementById('popok').focus()}
+document.getElementById('popok').onclick=()=>{document.getElementById('pop').hidden=true;if(foco){foco.scrollIntoView({block:'center'});foco.focus()}};
+['negocio','entrega','obs'].forEach(id=>['input','change'].forEach(ev=>document.getElementById(id).addEventListener(ev,()=>{buildLink();check();if(id==='negocio')store.set('maher_negocio',document.getElementById('negocio').value)})));
+document.getElementById('enviar').addEventListener('click',e=>{
+  if(!listo()){e.preventDefault();aviso();return}
+  buildLink();guardar();const last={};Object.entries(cart).forEach(([k,q])=>last[items[k].id]=q);store.set('maher_nav_ultimo2',last);
+  // pantalla de confirmación
+  document.getElementById('okref').textContent=REF;document.getElementById('okwa').href=document.getElementById('enviar').href;
+  setTimeout(()=>{sheet.hidden=true;document.getElementById('ok').hidden=false},350);
+});
+document.getElementById('okvolver').onclick=()=>document.getElementById('ok').hidden=true;
+document.getElementById('oknuevo').onclick=()=>{Object.keys(cart).forEach(k=>setQ(+k,0));store.set('maher_nav_ref',null);REF=refPedido();document.getElementById('obs').value='';document.getElementById('ok').hidden=true;scrollTo({top:0})};
+// el menú de apartados marca dónde estás
+(function(){
+  const links=[...document.querySelectorAll('#chips a')],nav=document.querySelector('nav.chips .wrap');
+  if(!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;
+    links.forEach(a=>{const on=a.getAttribute('href')==='#'+en.target.id;a.classList.toggle('act',on);if(on)nav.scrollTo({left:a.offsetLeft-16,behavior:'smooth'})})}),{rootMargin:'-40% 0px -55% 0px'});
+  document.querySelectorAll('#cat section.sec').forEach(s=>io.observe(s));
+})();
+const neg=store.get('maher_negocio');if(neg)document.getElementById('negocio').value=neg;
+const last=store.get('maher_nav_ultimo2');const rep=document.getElementById('repetir');
+if(last&&Object.keys(last).length){rep.hidden=false;rep.onclick=()=>{Object.entries(last).forEach(([id,q])=>{const i=items.find(x=>x.id===id);if(i)setQ(i.k,q)});drawSheet();check();sheet.hidden=false}}
+const bor=store.get('maher_nav_borrador2');if(bor)Object.entries(bor).forEach(([id,q])=>{const i=items.find(x=>x.id===id);if(i)setQ(i.k,q)});
+refresh();
+
+// cuenta atrás hasta el cierre de pedidos
+(function(){
+  const fin=new Date(2026,10,20,23,59),dias=Math.ceil((fin-new Date())/864e5),el=document.getElementById('cd');
+  el.textContent=dias>1?`Quedan ${dias} días`:dias===1?'Último día para pedir':'Plazo general cerrado: pregúntanos por WhatsApp';
+})();
+
+// guirnalda de luces
+(function(){
+  const svg=document.getElementById('luces'),cols=['#f2c14e','#e4574f','#7fd18b','#fff3c4','#5fb3e8'];
+  function draw(){
+    const w=svg.clientWidth||400,n=Math.max(8,Math.round(w/38));svg.setAttribute('viewBox',`0 0 ${w} 46`);
+    let d=`M0 6`,s='';for(let i=0;i<=n;i++){const x=w*i/n,mx=x-w/n/2;if(i)d+=` Q${mx} 26 ${x} 6`;}
+    for(let i=0;i<n;i++){const x=w*(i+.5)/n,y=16+0,c=cols[i%cols.length];
+      s+=`<g transform="translate(${x} ${y})"><rect x="-2.5" y="-2" width="5" height="5" rx="1" fill="#2c3a33"/><ellipse class="b" cx="0" cy="10" rx="5" ry="8" fill="${c}" style="animation-delay:${(i%5)*.45}s;filter:drop-shadow(0 0 5px ${c})"/></g>`;}
+    svg.innerHTML=`<path d="${d}" fill="none" stroke="#2c3a33" stroke-width="1.6"/>`+s;
+  }
+  draw();addEventListener('resize',draw);
+})();
+
+// nieve suave en la portada
+(function(){
+  const c=document.getElementById('nieve'),x=c.getContext('2d'),red=matchMedia('(prefers-reduced-motion: reduce)').matches;let W,H,f=[];
+  function size(){const r=c.getBoundingClientRect(),d=devicePixelRatio||1;W=r.width;H=r.height;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);
+    f=Array.from({length:Math.round(W/9)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.8+.6,v:Math.random()*.4+.15,o:Math.random()*.5+.25}))}
+  function frame(){x.clearRect(0,0,W,H);for(const p of f){x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fillStyle=`rgba(255,255,255,${p.o})`;x.fill();
+    if(!red){p.y+=p.v;p.x+=Math.sin(p.y/30)*.2;if(p.y>H+3){p.y=-3;p.x=Math.random()*W}}}
+    if(!red)requestAnimationFrame(frame)}
+  size();frame();addEventListener('resize',size);
+})();
+</script>
+
+</body>
+</html>
