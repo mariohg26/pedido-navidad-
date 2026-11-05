@@ -96,6 +96,19 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .ed .res button small{color:var(--muted)}
 .ed .aviso{font-size:12.5px;color:var(--muted);margin-top:8px}
 .ped details{margin-top:6px;font-size:13px;color:var(--muted)}.ped details ul{margin-top:4px}
+/* pestaña de visitas: quién ha entrado en la página de pedidos */
+.tabs{overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs button{white-space:nowrap;flex:none}
+.vkp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.vfil{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.vfil button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:6px 12px;font-weight:600;font-size:13px;cursor:pointer}
+.vfil button[aria-pressed="true"]{background:var(--pine-2);border-color:var(--pine-2);color:#fff}
+.vis{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.vis .neg{font-weight:700;font-size:15.5px;overflow-wrap:anywhere}
+.vis .meta{color:var(--muted);font-size:12.5px}
+.vis.sinped{border-color:var(--gold);background:var(--new)}
+.vis .tag{flex:none;white-space:nowrap}
+.tag.ok{background:var(--ok);color:#fff}.tag.mira{background:var(--gold);color:#1d2a22}
+.vanon{color:var(--muted);font-size:13px;text-align:center;margin:12px 0 4px}
 </style>
 </head>
 <body>
@@ -114,9 +127,10 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
     <label style="font-size:13.5px"><input type="checkbox" id="soloNuevos"> Solo los no marcados como pasados a fábrica</label>
   </div>
   <div class="kpis"><div class="kpi"><b id="kPed">0</b><span>pedidos</span></div><div class="kpi"><b id="kCli">0</b><span>clientes</span></div><div class="kpi"><b id="kNue">0</b><span>sin pasar a fábrica</span></div></div>
-  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="prov">Por proveedor</button><button role="tab" aria-selected="false" data-t="ped">Pedidos de clientes</button></div>
+  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="prov">Por proveedor</button><button role="tab" aria-selected="false" data-t="ped">Pedidos de clientes</button><button role="tab" aria-selected="false" data-t="vis">Han visto la tienda</button></div>
   <section id="tprov"></section>
   <section id="tped" hidden></section>
+  <section id="tvis" hidden></section>
 </main>
 <div class="toast" id="toast" hidden></div>
 <div id="doc"></div>
@@ -163,10 +177,11 @@ async function rpc(fn,body){
 function toast(t){const e=$('toast');e.textContent=t;e.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>e.hidden=true,2200)}
 async function cargar(){
   PED=await rpc('web_panel_pedidos',{clave:CLAVE})||[];
+  try{VIS=await rpc('web_panel_visitas',{clave:CLAVE})||[]}catch(e){VIS=null}
   const sems=[...new Set(PED.map(p=>p.entrega))].sort(porDia);
   const cur=$('semana').value;
   $('semana').innerHTML='<option value="">Todas las semanas</option>'+sems.map(s=>`<option ${s===cur?'selected':''}>${esc(s)}</option>`).join('');
-  pintar();
+  pintar();if(!$('tvis').hidden)pintarVis();
 }
 async function entrar(){
   CLAVE=$('clave').value.trim();if(!CLAVE)return;$('err').textContent='';$('entrar').disabled=true;
@@ -300,7 +315,29 @@ $('tped').addEventListener('input',e=>{
 });
 $('tped').addEventListener('change',e=>{if(!ED)return;if(e.target.id==='edsem')ED.entrega=e.target.value;if(e.target.id==='edobs')ED.obs=e.target.value});
 document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));$('tprov').hidden=b.dataset.t!=='prov';$('tped').hidden=b.dataset.t!=='ped'});
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));$('tprov').hidden=b.dataset.t!=='prov';$('tped').hidden=b.dataset.t!=='ped';$('tvis').hidden=b.dataset.t!=='vis';if(b.dataset.t==='vis')pintarVis()});
+// ---- pestaña "Han visto la tienda" ----
+let VIS=[],VFIL='todos';
+const nn=t=>norm(t).replace(/[^a-z0-9ñ]+/g,' ').trim();
+function cuando(d){const f=new Date(d),h=new Date();const dia=f.toDateString()===h.toDateString()?'hoy':(new Date(h-864e5).toDateString()===f.toDateString()?'ayer':f.toLocaleDateString('es-ES',{day:'numeric',month:'short'}));
+  return dia+' a las '+f.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'})}
+function pintarVis(){
+  if(VIS===null){$('tvis').innerHTML='<p class="vacio">No se han podido cargar las visitas. Pulsa ↻ Actualizar.</p>';return}
+  const pedNom=new Set(PED.filter(p=>p.estado!=='anulado').map(p=>nn(p.negocio)));
+  const con=VIS.filter(v=>v.negocio),anon=VIS.filter(v=>!v.negocio).length;
+  con.forEach(v=>{v.pidio=v.pedidos>0||(v.nombres||[v.negocio]).some(n=>pedNom.has(nn(n)))});
+  const nPed=con.filter(v=>v.pidio).length;
+  const lista=con.filter(v=>VFIL==='todos'||(VFIL==='sin'?!v.pidio:v.pidio));
+  $('tvis').innerHTML=`<div class="vkp"><div class="kpi"><b>${con.length}</b><span>han entrado</span></div><div class="kpi"><b>${nPed}</b><span>han pedido</span></div><div class="kpi"><b>${con.length-nPed}</b><span>solo han mirado</span></div></div>
+  <div class="vfil" role="group" aria-label="Filtrar visitas">${[['todos','Todos'],['sin','Solo han mirado'],['con','Han pedido']].map(([k,t])=>`<button type="button" data-vf="${k}" aria-pressed="${VFIL===k}">${t}</button>`).join('')}</div>
+  ${lista.map(v=>{const otros=(v.nombres||[]).filter(n=>n!==v.negocio);
+    return `<div class="vis ${v.pidio?'':'sinped'}"><div><div class="neg">${esc(v.negocio)}</div>
+    <div class="meta">Última vez: ${cuando(v.ultima)} · ${v.entradas||1} ${(v.entradas||1)===1?'entrada':'entradas'}${(v.entradas||1)>1?` · primera: ${cuando(v.primera)}`:''}</div>
+    ${otros.length?`<div class="meta">También escribió: ${otros.map(esc).join(', ')}</div>`:''}</div>
+    ${v.pidio?'<span class="tag ok">Ha pedido</span>':'<span class="tag mira">Solo ha mirado</span>'}</div>`}).join('')||'<p class="vacio">Todavía no hay nadie en esta lista.</p>'}
+  ${anon?`<p class="vanon">Además, ${anon} ${anon===1?'persona abrió':'personas abrieron'} la página sin llegar a poner su nombre.</p>`:''}`;
+}
+$('tvis').addEventListener('click',e=>{const b=e.target.closest('button[data-vf]');if(!b)return;VFIL=b.dataset.vf;pintarVis()});
 $('semana').onchange=pintar;$('soloNuevos').onchange=pintar;
 $('entrar').onclick=entrar;$('clave').addEventListener('keydown',e=>{if(e.key==='Enter')entrar()});
 $('recargar').onclick=async()=>{try{await cargar();toast('Actualizado')}catch(e){toast(e.message)}};
