@@ -109,6 +109,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .vis .tag{flex:none;white-space:nowrap}
 .tag.ok{background:var(--ok);color:#fff}.tag.mira{background:var(--gold);color:#1d2a22}
 .vanon{color:var(--muted);font-size:13px;text-align:center;margin:12px 0 4px}
+.cto{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px}.cto .btn{padding:4px 10px;font-size:13px;text-decoration:none}.sintel{color:#b45309}
 </style>
 </head>
 <body>
@@ -157,7 +158,7 @@ function imprimir(tit,quien,filas,entrega,p){
   const num=p?`Ref. ${p.ref}`:`PC-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-${quien.replace(/[^A-Za-z]/g,'').slice(0,3).toUpperCase()}`;
   const kg=filas.reduce((s,t)=>s+(t.l&&t.l.modo==='kg'&&t.l.peso?t.q*t.l.peso:0),0);
   $('doc').innerHTML=`<div class="dh"><div><img src="img/logo.png" alt="Quesos Maher"><h1>${tit}</h1></div><div class="dm"><b>${esc(num)}</b><br>Fecha: ${hoy()}</div></div>
-  <div class="two"><div><b>${p?'Cliente':'Proveedor'}</b>${esc(quien)}${p&&p.obs?`<br><i>${esc(p.obs)}</i>`:''}</div><div><b>${p?'Servir':'Comprador'}</b>${p?esc(entrega):'Quesos Maher · Mariano Hernández Martín<br>Salamanca · WhatsApp 622 853 727<br>pedidos.quesosmaher@gmail.com'}</div></div>
+  <div class="two"><div><b>${p?'Cliente':'Proveedor'}</b>${esc(quien)}${p&&(p.contacto||p.localidad)?`<br>${esc([p.contacto,p.localidad].filter(Boolean).join(' · '))}`:''}${p&&p.telefono?`<br>Tel. ${esc(p.telefono)}`:''}${p&&p.obs?`<br><i>${esc(p.obs)}</i>`:''}</div><div><b>${p?'Servir':'Comprador'}</b>${p?esc(entrega):'Quesos Maher · Mariano Hernández Martín<br>Salamanca · WhatsApp 622 853 727<br>pedidos.quesosmaher@gmail.com'}</div></div>
   ${p?'':`<p style="margin:0 0 10px"><b>Entrega solicitada:</b> ${esc(entrega)}</p>`}
   <table><thead><tr><th>Producto</th><th>Formato</th><th style="text-align:right">Cantidad</th>${p?'<th style="text-align:right">Preparado</th>':''}</tr></thead><tbody>
   ${filas.map(t=>t.h?`<tr><td colspan="${p?4:3}" style="padding-top:12px;font-weight:700;color:#103526">${esc(t.h)}</td></tr>`:`<tr><td>${esc(t.l.n)}</td><td>${esc(t.l.d)}</td><td class="n">${esc(cant(t.l,t.q))}${t.l.modo==='kg'&&t.l.peso?`<br><small>aprox. ${fq(t.q*t.l.peso)} kg</small>`:''}</td>${p?'<td class="n">☐</td>':''}</tr>`).join('')}
@@ -205,6 +206,12 @@ function textoProv(m,filas){
   return [`*PEDIDO ${m.toUpperCase()} - QUESOS MAHER*`,s?`Para: ${s}`:'',''].filter((x,i)=>x||i===2)
     .concat(filas.map(t=>`• ${cant(t.l,t.q)} - ${t.l.n} (${t.l.d})`)).concat(['','Mariano · Quesos Maher']).join('\n');
 }
+function contactoHtml(p){
+  const quien=[p.contacto,p.localidad].filter(Boolean).map(esc).join(' · ');
+  if(!p.telefono)return quien?`<div class="meta">${quien}</div>`:'<div class="meta sintel">Sin teléfono (pedido anterior al cambio)</div>';
+  const n=p.telefono.replace(/[^0-9]/g,''),wa=(n.length===9?'34':'')+n;
+  return `<div class="cto"><a class="btn" href="tel:${esc(p.telefono)}">📞 ${esc(p.telefono)}</a><a class="btn" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
+}
 function pintar(){
   const lista=visibles();
   $('kPed').textContent=lista.length;$('kCli').textContent=new Set(lista.map(p=>p.negocio.toLowerCase())).size;$('kNue').textContent=PED.filter(p=>p.estado==='nuevo').length;
@@ -223,7 +230,7 @@ function pintar(){
     const tag=p.estado==='nuevo'?'<span class="tag nuevo">Nuevo</span>':p.estado==='anulado'?'<span class="tag anulado">Anulado</span>':'<span class="tag">Pasado a fábrica</span>';
     const mod=p.editado?`<div class="meta">✏️ Modificado por ti el ${new Date(p.editado).toLocaleString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}</div>`:'';
     if(ED&&ED.id===p.id)return `<div class="ped ${p.estado}" data-ped="${p.id}"><div class="top"><div><div class="neg">${esc(p.negocio)}</div><div class="meta">Modificando el pedido · Ref. ${esc(p.ref)}</div></div>${tag}</div><div class="ed" id="ed">${htmlEd()}</div></div>`;
-    return `<div class="ped ${p.estado}" data-ped="${p.id}"><div class="top"><div><div class="neg">${esc(p.negocio)}</div><div class="meta">${esc(p.entrega)} · ${f} · Ref. ${esc(p.ref)}</div>${mod}</div>${tag}</div>
+    return `<div class="ped ${p.estado}" data-ped="${p.id}"><div class="top"><div><div class="neg">${esc(p.negocio)}</div><div class="meta">${esc(p.entrega)} · ${f} · Ref. ${esc(p.ref)}</div>${contactoHtml(p)}${mod}</div>${tag}</div>
     <ul>${(p.lineas||[]).map(l=>`<li><b>${esc(cant(l,+l.q))}</b> · ${esc(l.n)} <span class="meta">(${esc(l.d)} · ${esc(l.m)})</span></li>`).join('')}</ul>
     ${p.obs?`<div class="obs">${esc(p.obs)}</div>`:''}
     ${p.editado&&p.lineas_cliente?`<details><summary>Ver lo que pidió el cliente</summary><ul>${p.lineas_cliente.map(l=>`<li>${esc(cant(l,+l.q))} · ${esc(l.n)} (${esc(l.d)})</li>`).join('')}</ul></details>`:''}

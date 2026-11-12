@@ -155,7 +155,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,textarea:focus-visible,
 .upsell .opts{display:flex;flex-wrap:wrap;gap:6px}
 .upsell button{border:1px solid var(--pine-2);background:var(--card);color:var(--ink);border-radius:16px;padding:6px 10px;font:600 13px var(--body);cursor:pointer;text-align:left}
 label.fl{display:block;font-size:13px;font-weight:600;margin:10px 0 4px}
-.sheet input[type=text],.sheet select,.sheet textarea{width:100%;font:16px var(--body);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--snow);color:var(--ink)}
+.sheet input[type=text],.sheet input[type=tel],.sheet select,.sheet textarea{width:100%;font:16px var(--body);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--snow);color:var(--ink)}
 .sheet textarea{min-height:64px;resize:vertical}
 .pop{position:fixed;inset:0;z-index:30;background:rgba(5,15,10,.55);display:grid;place-items:center;padding:20px}
 .popbox{background:var(--card);color:var(--ink);border-radius:16px;border-top:4px solid var(--holly);padding:20px 18px 18px;max-width:340px;width:100%;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.35)}
@@ -287,6 +287,8 @@ body.bloq{overflow:hidden}
   <div class="paso"><span>2</span>Tus datos de entrega</div>
   <label class="fl" for="negocio">Nombre del bar, restaurante o tienda</label>
   <input type="text" id="negocio" placeholder="Ej.: Bar La Plaza" autocomplete="organization">
+  <label class="fl" for="telefono">Teléfono de contacto</label>
+  <input type="tel" id="telefono" placeholder="Ej.: 600 123 456" inputmode="tel" autocomplete="tel">
   <label class="fl" for="entrega">¿Qué semana quieres que te lo sirvamos?</label>
   <select id="entrega">
     <option value="" selected disabled>Elige la semana de entrega</option>
@@ -457,35 +459,38 @@ function refPedido(){
   return x;
 }
 let REF=refPedido();
+const val=id=>document.getElementById(id).value.trim();
+const tel=()=>val('telefono').replace(/[^0-9+]/g,'');
+const telOk=()=>tel().replace(/\D/g,'').length>=9;
 function guardar(){
   const lineas=Object.keys(cart).map(k=>{const i=items[k],q=cart[k];return {id:i.id,n:i.n,d:i.d,m:i.m,modo:i.modo,q,caja:i.caja||null,uds:porCaja(i)?q*i.caja:null,peso:i.peso||null,pr:i.pr}});
-  const p={vis:VIS,ref:REF,negocio:document.getElementById('negocio').value.trim(),entrega:document.getElementById('entrega').value,obs:document.getElementById('obs').value.trim(),lineas};
+  const p={vis:VIS,ref:REF,negocio:document.getElementById('negocio').value.trim(),telefono:tel(),entrega:document.getElementById('entrega').value,obs:document.getElementById('obs').value.trim(),lineas};
   store.set('maher_nav_ref',{ref:REF,t:Date.now()});
   try{fetch(SB+'/rest/v1/rpc/web_guardar_pedido',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json',apikey:SBK},body:JSON.stringify({p})}).catch(()=>{})}catch(e){}
 }
 function mensaje(){
   const neg=document.getElementById('negocio').value.trim();
-  const L=['*PEDIDO DE NAVIDAD - QUESOS MAHER*','Ref.: '+REF,'Cliente: '+(neg||'(sin nombre)'),'Entrega: '+document.getElementById('entrega').value,''];
+  const L=['*PEDIDO DE NAVIDAD - QUESOS MAHER*','Ref.: '+REF,'Cliente: '+(neg||'(sin nombre)'),'Tel.: '+val('telefono'),'Entrega: '+document.getElementById('entrega').value,''];
   Object.keys(cart).forEach(k=>{const i=items[k],q=cart[k];L.push(`• ${cant(i,q)} - ${i.n} (${fmt(i)})`)});
   const obs=document.getElementById('obs').value.trim(); if(obs)L.push('','Observaciones: '+obs);
   return L.join('\n');
 }
-function buildLink(){const b=document.getElementById('enviar');if(!(document.getElementById('negocio').value.trim()&&document.getElementById('entrega').value)){b.removeAttribute('href');return}b.href='https://wa.me/'+TEL+'?text='+encodeURIComponent(mensaje())}
+function buildLink(){const b=document.getElementById('enviar');if(!listo()){b.removeAttribute('href');return}b.href='https://wa.me/'+TEL+'?text='+encodeURIComponent(mensaje())}
 document.getElementById('ver').onclick=()=>{drawSheet();check();sheet.hidden=false};
 document.getElementById('cerrar').onclick=()=>sheet.hidden=true;
 sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.hidden=true});
 document.getElementById('pop').addEventListener('click',e=>{if(e.target.id==='pop')document.getElementById('popok').click()});
 document.getElementById('lines').addEventListener('click',e=>{const b=e.target.closest('.x');if(!b)return;setQ(+b.dataset.k,0);if(!Object.keys(cart).length)sheet.hidden=true;else drawSheet()});
 document.getElementById('ups').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;setQ(+b.dataset.k,1);drawSheet()});
-const listo=()=>document.getElementById('negocio').value.trim()&&document.getElementById('entrega').value;
+const listo=()=>document.getElementById('negocio').value.trim()&&telOk()&&document.getElementById('entrega').value;
 function check(){}
 let foco=null;
-function aviso(){const n=document.getElementById('negocio').value.trim(),s=document.getElementById('entrega').value;
-  const falta=[!n&&'el <b>nombre de tu negocio</b>',!s&&'la <b>semana de entrega</b>'].filter(Boolean);
-  document.getElementById('popm').innerHTML='Para enviarlo tienes que poner '+falta.join(' y ')+'.';
-  foco=document.getElementById(n?'entrega':'negocio');document.getElementById('pop').hidden=false;document.getElementById('popok').focus()}
+function aviso(){const n=document.getElementById('negocio').value.trim(),s=document.getElementById('entrega').value,t=telOk();
+  const falta=[!n&&'el <b>nombre de tu negocio</b>',!t&&(val('telefono')?'un <b>teléfono</b> válido (9 cifras)':'un <b>teléfono de contacto</b>'),!s&&'la <b>semana de entrega</b>'].filter(Boolean);
+  document.getElementById('popm').innerHTML='Para enviarlo tienes que poner '+(falta.length>1?falta.slice(0,-1).join(', ')+' y '+falta.at(-1):falta[0])+'.';
+  foco=document.getElementById(!n?'negocio':!t?'telefono':'entrega');document.getElementById('pop').hidden=false;document.getElementById('popok').focus()}
 document.getElementById('popok').onclick=()=>{document.getElementById('pop').hidden=true;if(foco){foco.scrollIntoView({block:'center'});foco.focus()}};
-['negocio','entrega','obs'].forEach(id=>['input','change'].forEach(ev=>document.getElementById(id).addEventListener(ev,()=>{buildLink();check();if(id==='negocio'){store.set('maher_negocio',document.getElementById('negocio').value);saludo()}})));
+['negocio','telefono','entrega','obs'].forEach(id=>['input','change'].forEach(ev=>document.getElementById(id).addEventListener(ev,()=>{buildLink();check();if(id==='negocio'){store.set('maher_negocio',document.getElementById('negocio').value);saludo()}if(id==='telefono')store.set('maher_'+id,document.getElementById(id).value)})));
 document.getElementById('enviar').addEventListener('click',e=>{
   if(!listo()){e.preventDefault();aviso();return}
   buildLink();guardar();visita('pedido',document.getElementById('negocio').value.trim());const last={};Object.entries(cart).forEach(([k,q])=>last[items[k].id]=q);store.set('maher_nav_ultimo2',last);
@@ -504,6 +509,7 @@ document.getElementById('oknuevo').onclick=()=>{Object.keys(cart).forEach(k=>set
   document.querySelectorAll('#cat section.sec').forEach(s=>io.observe(s));
 })();
 const neg=store.get('maher_negocio');if(neg)document.getElementById('negocio').value=neg;
+['telefono'].forEach(id=>{const v=store.get('maher_'+id);if(v)document.getElementById(id).value=v});
 // ---- bienvenida y registro de quién entra (lo ve Mario en su panel) ----
 const bienv=document.getElementById('bienv'),bn=document.getElementById('bienvn');
 document.getElementById('bienvlogo').src=document.querySelector('.hero .ribbon img').src;
