@@ -108,6 +108,17 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .vis.sinped{border-color:var(--gold);background:var(--new)}
 .vis .tag{flex:none;white-space:nowrap}
 .tag.ok{background:var(--ok);color:#fff}.tag.mira{background:var(--gold);color:#1d2a22}
+/* pestaña de carritos sin enviar (solo la ve Mario) */
+.tabs .cnt{display:inline-block;min-width:20px;padding:1px 6px;margin-left:5px;border-radius:10px;background:var(--holly);color:#fff;font-size:12px;line-height:18px;text-align:center}
+.car{background:var(--new);border:1px solid var(--gold);border-radius:14px;padding:12px;margin-bottom:10px}
+.car.hecho{background:var(--card);border-color:var(--line);opacity:.7}
+.car .neg{font-weight:700;font-size:16px;overflow-wrap:anywhere}.car .neg.anon{color:var(--muted);font-style:italic}
+.car .meta{color:var(--muted);font-size:12.5px}
+.car .tag{flex:none;white-space:nowrap;align-self:flex-start}
+.car ul{margin:8px 0 0;padding-left:18px}.car li{margin:2px 0}
+.car .cto{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.carnota{font-size:13px;color:var(--muted);margin:0 0 10px}
+.btn.conf{background:var(--ok);border-color:var(--ok);color:#fff}
 .vanon{color:var(--muted);font-size:13px;text-align:center;margin:12px 0 4px}
 .cto{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 2px}.cto .btn{padding:4px 10px;font-size:13px;text-decoration:none}.sintel{color:#b45309}
 </style>
@@ -128,10 +139,11 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
     <label style="font-size:13.5px"><input type="checkbox" id="soloNuevos"> Solo los no marcados como pasados a fábrica</label>
   </div>
   <div class="kpis"><div class="kpi"><b id="kPed">0</b><span>pedidos</span></div><div class="kpi"><b id="kCli">0</b><span>clientes</span></div><div class="kpi"><b id="kNue">0</b><span>sin pasar a fábrica</span></div></div>
-  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="prov">Por proveedor</button><button role="tab" aria-selected="false" data-t="ped">Pedidos de clientes</button><button role="tab" aria-selected="false" data-t="vis">Han visto la tienda</button></div>
+  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="prov">Por proveedor</button><button role="tab" aria-selected="false" data-t="ped">Pedidos de clientes</button><button role="tab" aria-selected="false" data-t="vis">Han visto la tienda</button><button role="tab" aria-selected="false" data-t="car">Carritos sin enviar<span class="cnt" id="nCar" hidden>0</span></button></div>
   <section id="tprov"></section>
   <section id="tped" hidden></section>
   <section id="tvis" hidden></section>
+  <section id="tcar" hidden></section>
 </main>
 <div class="toast" id="toast" hidden></div>
 <div id="doc"></div>
@@ -179,10 +191,11 @@ function toast(t){const e=$('toast');e.textContent=t;e.hidden=false;clearTimeout
 async function cargar(){
   PED=await rpc('web_panel_pedidos',{clave:CLAVE})||[];
   try{VIS=await rpc('web_panel_visitas',{clave:CLAVE})||[]}catch(e){VIS=null}
+  try{CAR=await rpc('web_panel_carritos',{clave:CLAVE})||[]}catch(e){CAR=null}
   const sems=[...new Set(PED.map(p=>p.entrega))].sort(porDia);
   const cur=$('semana').value;
   $('semana').innerHTML='<option value="">Todas las semanas</option>'+sems.map(s=>`<option ${s===cur?'selected':''}>${esc(s)}</option>`).join('');
-  pintar();if(!$('tvis').hidden)pintarVis();
+  pintar();if(!$('tvis').hidden)pintarVis();pintarCar();
 }
 async function entrar(){
   CLAVE=$('clave').value.trim();if(!CLAVE)return;$('err').textContent='';$('entrar').disabled=true;
@@ -210,7 +223,8 @@ function contactoHtml(p){
   const quien=[p.contacto,p.localidad].filter(Boolean).map(esc).join(' · ');
   if(!p.telefono)return quien?`<div class="meta">${quien}</div>`:'<div class="meta sintel">Sin teléfono (pedido anterior al cambio)</div>';
   const n=p.telefono.replace(/[^0-9]/g,''),wa=(n.length===9?'34':'')+n;
-  return `<div class="cto"><a class="btn" href="tel:${esc(p.telefono)}">📞 ${esc(p.telefono)}</a><a class="btn" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
+  const conf=`Hola${p.negocio?' '+p.negocio:''}, hemos recibido tu pedido de Navidad (Ref. ${p.ref}) para la ${String(p.entrega||'').replace(/^Semana/,'semana')}. ¡Muchas gracias! Cualquier cambio, escríbenos por aquí.\nQuesos Maher`;
+  return `<div class="cto"><a class="btn conf" href="https://wa.me/${wa}?text=${encodeURIComponent(conf)}" target="_blank" rel="noopener">✅ Confirmar recibido</a><a class="btn" href="tel:${esc(p.telefono)}">📞 ${esc(p.telefono)}</a><a class="btn" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
 }
 function pintar(){
   const lista=visibles();
@@ -322,7 +336,28 @@ $('tped').addEventListener('input',e=>{
 });
 $('tped').addEventListener('change',e=>{if(!ED)return;if(e.target.id==='edsem')ED.entrega=e.target.value;if(e.target.id==='edobs')ED.obs=e.target.value});
 document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));$('tprov').hidden=b.dataset.t!=='prov';$('tped').hidden=b.dataset.t!=='ped';$('tvis').hidden=b.dataset.t!=='vis';if(b.dataset.t==='vis')pintarVis()});
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));$('tprov').hidden=b.dataset.t!=='prov';$('tped').hidden=b.dataset.t!=='ped';$('tvis').hidden=b.dataset.t!=='vis';$('tcar').hidden=b.dataset.t!=='car';if(b.dataset.t==='vis')pintarVis();if(b.dataset.t==='car')pintarCar()});
+// ---- pestaña "Carritos sin enviar": clientes que han metido productos y no han enviado el pedido ----
+let CAR=[];
+function pintarCar(){
+  const n=(CAR||[]).filter(c=>!c.gestionado).length;$('nCar').textContent=n;$('nCar').hidden=!n;
+  if($('tcar').hidden)return;
+  if(CAR===null){$('tcar').innerHTML='<p class="vacio">No se han podido cargar los carritos. Pulsa ↻ Actualizar.</p>';return}
+  const orden=[...CAR].sort((a,b)=>(!!a.gestionado-!!b.gestionado)||(new Date(b.actualizado)-new Date(a.actualizado)));
+  $('tcar').innerHTML=`<p class="carnota">Clientes que han metido productos en el carrito y <b>no han enviado</b> el pedido. Solo lo ves tú: el cliente no sabe que aparece aquí.</p>`+
+  (orden.map(c=>{
+    const t=(c.telefono||'').replace(/[^0-9]/g,''),wa=(t.length===9?'34':'')+t;
+    const rec=`Hola${c.negocio?' '+c.negocio:''}, te escribimos de Quesos Maher. ¿Te echamos una mano con el pedido de Navidad? Recuerda que el plazo para pedir acaba el 20 de noviembre.`;
+    return `<div class="car ${c.gestionado?'hecho':''}"><div class="top" style="display:flex;justify-content:space-between;gap:8px"><div>
+      <div class="neg ${c.negocio?'':'anon'}">${c.negocio?esc(c.negocio):'Sin nombre (aún no lo ha escrito)'}</div>
+      <div class="meta">Último cambio: ${cuando(c.actualizado)}${c.entrega?' · '+esc(c.entrega):''}</div></div>
+      ${c.gestionado?'<span class="tag">Gestionado</span>':'<span class="tag mira">Sin enviar</span>'}</div>
+      <ul>${(c.lineas||[]).map(l=>`<li><b>${esc(cant(l,+l.q))}</b> · ${esc(l.n)} <span class="meta">(${esc(l.d)} · ${esc(l.m)})</span></li>`).join('')}</ul>
+      <div class="cto">${t?`<a class="btn" href="tel:${esc(c.telefono)}">📞 ${esc(c.telefono)}</a><a class="btn wa" href="https://wa.me/${wa}?text=${encodeURIComponent(rec)}" target="_blank" rel="noopener">Recordarle por WhatsApp</a>`:'<span class="meta">Sin teléfono todavía</span>'}
+      ${c.gestionado?`<button class="btn" data-car="${esc(c.visitante)}" data-si="0">Volver a pendientes</button>`:`<button class="btn" data-car="${esc(c.visitante)}" data-si="1">Ya lo he gestionado</button>`}</div></div>`}).join('')||'<p class="vacio">Ahora mismo no hay ningún carrito sin enviar. 👍</p>');
+}
+$('tcar').addEventListener('click',async e=>{const b=e.target.closest('button[data-car]');if(!b)return;b.disabled=true;
+  try{await rpc('web_panel_carrito_gestionado',{clave:CLAVE,vis:b.dataset.car,si:b.dataset.si==='1'});await cargar()}catch(err){toast(err.message);b.disabled=false}});
 // ---- pestaña "Han visto la tienda" ----
 let VIS=[],VFIL='todos';
 const nn=t=>norm(t).replace(/[^a-z0-9ñ]+/g,' ').trim();
