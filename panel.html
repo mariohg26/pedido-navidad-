@@ -223,7 +223,10 @@ function contactoHtml(p){
   const quien=[p.contacto,p.localidad].filter(Boolean).map(esc).join(' · ');
   if(!p.telefono)return quien?`<div class="meta">${quien}</div>`:'<div class="meta sintel">Sin teléfono (pedido anterior al cambio)</div>';
   const n=p.telefono.replace(/[^0-9]/g,''),wa=(n.length===9?'34':'')+n;
-  const conf=`Hola${p.negocio?' '+p.negocio:''}, hemos recibido tu pedido de Navidad (Ref. ${p.ref}) para la ${String(p.entrega||'').replace(/^Semana/,'semana')}. ¡Muchas gracias! Cualquier cambio, escríbenos por aquí.\nQuesos Maher`;
+  // confirmación con el detalle del pedido (tal como está ahora, con los cambios que hayas hecho)
+  const conf=[`Hola${p.negocio?' '+p.negocio:''}, hemos recibido tu pedido de Navidad (Ref. ${p.ref}) para la ${String(p.entrega||'').replace(/^Semana/,'semana')}.`,'','*Esto es lo que nos has pedido:*',
+    ...(p.lineas||[]).map(l=>`• ${cant(l,+l.q)} - ${l.n} (${l.d})`),...(p.obs?['',`Observaciones: ${p.obs}`]:[]),
+    '','Si está todo bien, no hace falta que contestes a este mensaje. Si algo no cuadra, dínoslo por aquí y lo cambiamos.','','Si en algún momento necesitas alguna otra cosita, también puedes hacer otro pedido desde este enlace:','https://quesosmaher.vercel.app','','¡Muchas gracias!','Quesos Maher'].join('\n');
   return `<div class="cto"><a class="btn conf" href="https://wa.me/${wa}?text=${encodeURIComponent(conf)}" target="_blank" rel="noopener">✅ Confirmar recibido</a><a class="btn" href="tel:${esc(p.telefono)}">📞 ${esc(p.telefono)}</a><a class="btn" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
 }
 function pintar(){
