@@ -227,6 +227,18 @@ function totales(lista){
   }));
   return T;
 }
+// Lo que queda por pedir a un proveedor: pedidos de clientes (sin anulados) menos lo anotado en "Pedido a fábrica".
+// Lo pedido a fábrica cubre primero las semanas de entrega más cercanas; lo que falta sale en las siguientes.
+function faltaPorPedir(m){
+  const vivos=PED.filter(p=>p.estado!=='anulado'),sel=$('semana').value,resto={};
+  const sems=[...new Set(vivos.map(p=>p.entrega))].sort(porDia).map(se=>{
+    const T=totales(vivos.filter(p=>p.entrega===se))[m]||{};
+    const filas=Object.entries(T).map(([k,t])=>{const cub=Math.min(t.q,resto[k]??=(FAB[k]??0));resto[k]-=cub;return {l:t.l,q:t.q-cub}})
+      .filter(t=>t.q>0).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es'));
+    return {se,filas}}).filter(x=>x.filas.length&&(!sel||x.se===sel));
+  const tot={};sems.forEach(x=>x.filas.forEach(t=>{const k=t.l.id||(t.l.n+'|'+t.l.d);tot[k]=tot[k]?{l:t.l,q:tot[k].q+t.q}:{l:t.l,q:t.q}}));
+  return {sems,filas:Object.values(tot).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es'))};
+}
 function textoProv(m,filas){
   const s=$('semana').value;
   return [`*PEDIDO ${m.toUpperCase()} - QUESOS MAHER*`,s?`Para: ${s}`:'',''].filter((x,i)=>x||i===2)
@@ -266,6 +278,7 @@ function pintar(){
       ${q==null?(cli?`<span class="queda nada">Sin anotar · faltan ${cli} ${u}</span>`:''):`<span class="queda ${q<0?'mal':'ok'}">${q<0?`Faltan ${-q} ${u} por pedir`:`Te quedan ${q} ${u}`}</span>`}</div></td></tr>`}).join('')}
     </tbody></table>
     <div class="fadd"><input type="search" class="fbus" data-m="${esc(m)}" placeholder="+ Anotar otro producto pedido a ${esc(m)}…" autocomplete="off" aria-label="Anotar otro producto pedido a ${esc(m)}"><div class="fres"></div></div>
+    <div class="sub">El pedido (WhatsApp, texto, PDF y Excel) solo lleva lo que te falta por pedir.</div>
     <div class="acts"><button class="btn wa" data-a="wa">Enviar por WhatsApp</button><button class="btn" data-a="copiar">Copiar texto</button><button class="btn pri" data-a="pdf">Pedido de compra (PDF)</button><button class="btn" data-a="xls">Descargar Excel</button></div></div>`}).join('')
     :'<p class="vacio">Todavía no hay pedidos para esta selección.</p>';
   const qb=norm($('buscar')?$('buscar').value:'');
@@ -296,17 +309,19 @@ $('tprov').addEventListener('click',e=>{const b=e.target.closest('button[data-fa
   const i=$('tprov').querySelector(`input[data-fab="${CSS.escape(k)}"]`);if(i){i.scrollIntoView({block:'center'});i.focus()}});
 $('tprov').addEventListener('click',async e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;const m=b.closest('.prov').dataset.m;
-  const filas=Object.values(totales(visibles())[m]||{}).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es'));let txt=textoProv(m,filas);
+  // solo lo que falta por pedir (lo de los clientes menos lo ya pedido a fábrica)
+  const P=faltaPorPedir(m),filas=P.filas;
+  if(!filas.length){toast(`No falta nada por pedir a ${m}`);return}
+  let txt=textoProv(m,filas);
   if(!$('semana').value){const L=[`*PEDIDO ${m.toUpperCase()} - QUESOS MAHER*`];
-    [...new Set(visibles().map(p=>p.entrega))].sort(porDia).forEach(se=>{const T=totales(visibles().filter(p=>p.entrega===se))[m];if(!T)return;
-      L.push('',`*${se}*`);Object.values(T).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es')).forEach(t=>L.push(`• ${cant(t.l,t.q)} - ${t.l.n} (${t.l.d})`))});
+    P.sems.forEach(x=>{L.push('',`*${x.se}*`);x.filas.forEach(t=>L.push(`• ${cant(t.l,t.q)} - ${t.l.n} (${t.l.d})`))});
     txt=L.concat(['','Mariano · Quesos Maher']).join('\n')}
   if(b.dataset.a==='wa')window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank','noopener');
   if(b.dataset.a==='pdf'){
     // sin filtro de semana: el pedido de compra va separado por semana de entrega
     if($('semana').value)imprimir('PEDIDO DE COMPRA',m,filas.map(t=>({l:t.l,q:t.q})),$('semana').value,null);
-    else{const sems=[...new Set(visibles().map(p=>p.entrega))].sort(porDia),out=[];
-      sems.forEach(se=>{const T=totales(visibles().filter(p=>p.entrega===se))[m];if(!T)return;out.push({h:se});Object.values(T).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es')).forEach(t=>out.push({l:t.l,q:t.q}))});
+    else{const out=[];
+      P.sems.forEach(x=>{out.push({h:x.se});x.filas.forEach(t=>out.push({l:t.l,q:t.q}))});
       imprimir('PEDIDO DE COMPRA',m,out,'por semanas, como se indica abajo',null)}
   }
   if(b.dataset.a==='copiar'){try{await navigator.clipboard.writeText(txt);toast('Texto copiado')}catch(_){prompt('Copia el texto:',txt)}}
