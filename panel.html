@@ -117,6 +117,18 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .car .tag{flex:none;white-space:nowrap;align-self:flex-start}
 .car ul{margin:8px 0 0;padding-left:18px}.car li{margin:2px 0}
 .car .cto{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:6px}
+.prov tr.sinb td{border-bottom:0;padding-bottom:2px}.prov td.fabtd{padding-top:0}
+.fab label{white-space:nowrap}
+.fab{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:6px;font-size:13px}
+.fab label{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.fab input{width:64px;padding:6px 8px;border:1px solid var(--gold);border-radius:8px;background:var(--new);color:var(--ink);font-size:16px;text-align:center}
+.queda{font-weight:700;border-radius:10px;padding:2px 8px;white-space:nowrap}
+.queda.ok{background:#e3f3e8;color:#17663a}.queda.mal{background:#fbe3e4;color:#a3232b}.queda.nada{background:var(--chip);color:var(--muted);font-weight:600}
+@media (prefers-color-scheme: dark){.queda.ok{background:#173a26;color:#7fe0a5}.queda.mal{background:#3d1b1d;color:#ff9da2}}
+.faltan{background:#fbe3e4;color:#a3232b;border-radius:10px;padding:8px 10px;font-size:13.5px;font-weight:600;margin:6px 0}
+.cubierto{background:#e3f3e8;color:#17663a;border-radius:10px;padding:8px 10px;font-size:13.5px;font-weight:600;margin:6px 0}
+.fadd{margin-top:8px}.fadd .fbus{width:100%;padding:9px 12px;border:1px dashed var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:15px}
+.fres button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);padding:8px 4px;cursor:pointer;font:inherit}.fres small{color:var(--muted)}
 .carnota{font-size:13px;color:var(--muted);margin:0 0 10px}
 .btn.conf{background:var(--ok);border-color:var(--ok);color:#fff}
 .vanon{color:var(--muted);font-size:13px;text-align:center;margin:12px 0 4px}
@@ -179,7 +191,7 @@ function imprimir(tit,quien,filas,entrega,p){
   setTimeout(()=>window.print(),150);
 }
 const st={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-let CLAVE='',PED=[],CAT=[],ED=null;
+let CLAVE='',PED=[],CAT=[],ED=null,FAB={},FEXTRA=[];
 const SEMANAS=['Semana del 9 al 12 de diciembre','Semana del 14 al 19 de diciembre','Semana del 21 al 24 de diciembre'];
 fetch('catalogo.json').then(r=>r.json()).then(c=>CAT=c).catch(()=>{});
 async function rpc(fn,body){
@@ -192,6 +204,7 @@ async function cargar(){
   PED=await rpc('web_panel_pedidos',{clave:CLAVE})||[];
   try{VIS=await rpc('web_panel_visitas',{clave:CLAVE})||[]}catch(e){VIS=null}
   try{CAR=await rpc('web_panel_carritos',{clave:CLAVE})||[]}catch(e){CAR=null}
+  try{FAB=await rpc('web_panel_fabrica',{clave:CLAVE})||{}}catch(e){FAB={}}
   const sems=[...new Set(PED.map(p=>p.entrega))].sort(porDia);
   const cur=$('semana').value;
   $('semana').innerHTML='<option value="">Todas las semanas</option>'+sems.map(s=>`<option ${s===cur?'selected':''}>${esc(s)}</option>`).join('');
@@ -234,13 +247,26 @@ function pintar(){
   const lista=visibles();
   $('kPed').textContent=lista.length;$('kCli').textContent=new Set(lista.map(p=>p.negocio.toLowerCase())).size;$('kNue').textContent=PED.filter(p=>p.estado==='nuevo').length;
   const T=totales(lista);
+  // lo ya pedido a fábrica: se descuenta de lo que piden los clientes (todas las semanas, sin pedidos anulados)
+  const TA=totales(PED.filter(p=>p.estado!=='anulado')),todo={};Object.values(TA).forEach(o=>Object.assign(todo,o));
+  [...Object.keys(FAB),...FEXTRA].forEach(k=>{const i=CAT.find(c=>c.id===k)||(todo[k]&&todo[k].l);if(!i)return;const m=PROV.includes(i.m)?i.m:'Otros';T[m]=T[m]||{};if(!T[m][k])T[m][k]={l:i,q:0,cli:new Set()}});
+  const filtro=$('semana').value||$('soloNuevos').checked;
   $('tprov').innerHTML=Object.keys(T).length?[...PROV,'Otros'].filter(m=>T[m]).map(m=>{
     const filas=Object.values(T[m]).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es'));
     const kg=filas.reduce((s,t)=>s+(t.l&&t.l.modo==='kg'&&t.l.peso?t.q*t.l.peso:0),0);
+    const faltan=filas.filter(t=>{const k=t.l.id,c=todo[k]?todo[k].q:0;return c>(FAB[k]??0)}).length;
     return `<div class="prov" data-m="${esc(m)}"><h2>${esc(m)}</h2><div class="sub">${filas.length} producto${filas.length===1?'':'s'}${kg?` · unos ${fq(kg)} kg en piezas`:''}</div>${m==='Capdevila'?plazoCapdevila():''}
+    ${faltan?`<div class="faltan">⚠️ ${faltan} producto${faltan===1?'':'s'} con más pedido de clientes que lo que has pedido a fábrica (en rojo).</div>`:filas.some(t=>FAB[t.l.id]!=null)?'<div class="cubierto">✅ Todo lo que han pedido los clientes está cubierto con lo que has pedido a fábrica.</div>':''}
+    ${filtro?'<div class="sub">«Te quedan» se calcula con los pedidos de todas las semanas.</div>':''}
     <table><thead><tr><th>Producto</th><th style="text-align:right">Total</th><th style="text-align:right">Clientes</th></tr></thead><tbody>
-    ${filas.map(t=>`<tr><td>${esc(t.l.n)}<span class="f">${esc(t.l.d)}${t.l.modo==='kg'&&t.l.peso?` · aprox. ${fq(t.q*t.l.peso)} kg`:''}</span></td><td class="n">${esc(cant(t.l,t.q))}</td><td class="n">${t.cli.size}</td></tr>`).join('')}
-    </tbody></table><div class="acts"><button class="btn wa" data-a="wa">Enviar por WhatsApp</button><button class="btn" data-a="copiar">Copiar texto</button><button class="btn pri" data-a="pdf">Pedido de compra (PDF)</button><button class="btn" data-a="xls">Descargar Excel</button></div></div>`}).join('')
+    ${filas.map(t=>{const k=t.l.id,u=unidad(t.l,2),cli=todo[k]?todo[k].q:0,f=FAB[k],q=f==null?null:f-cli;
+      return `<tr class="sinb"><td>${esc(t.l.n)}<span class="f">${esc(t.l.d)}${t.l.modo==='kg'&&t.l.peso&&t.q?` · aprox. ${fq(t.q*t.l.peso)} kg`:''}</span></td>
+      <td class="n">${t.q?esc(cant(t.l,t.q)):'—'}</td><td class="n">${t.cli.size}</td></tr>
+      <tr><td colspan="3" class="fabtd"><div class="fab"><label>Pedido a fábrica <input type="number" inputmode="numeric" min="0" step="1" data-fab="${esc(k)}" data-m="${esc(m)}" value="${f??''}" placeholder="0" aria-label="Pedido a fábrica de ${esc(t.l.n)}"> ${u}</label>
+      ${q==null?(cli?`<span class="queda nada">Sin anotar · faltan ${cli} ${u}</span>`:''):`<span class="queda ${q<0?'mal':'ok'}">${q<0?`Faltan ${-q} ${u} por pedir`:`Te quedan ${q} ${u}`}</span>`}</div></td></tr>`}).join('')}
+    </tbody></table>
+    <div class="fadd"><input type="search" class="fbus" data-m="${esc(m)}" placeholder="+ Anotar otro producto pedido a ${esc(m)}…" autocomplete="off" aria-label="Anotar otro producto pedido a ${esc(m)}"><div class="fres"></div></div>
+    <div class="acts"><button class="btn wa" data-a="wa">Enviar por WhatsApp</button><button class="btn" data-a="copiar">Copiar texto</button><button class="btn pri" data-a="pdf">Pedido de compra (PDF)</button><button class="btn" data-a="xls">Descargar Excel</button></div></div>`}).join('')
     :'<p class="vacio">Todavía no hay pedidos para esta selección.</p>';
   const qb=norm($('buscar')?$('buscar').value:'');
   $('tped').innerHTML='<input class="buscar" id="buscar" type="search" placeholder="Buscar cliente o producto…" aria-label="Buscar pedido">'+PED.filter(p=>(!$('semana').value||p.entrega===$('semana').value)&&(!qb||norm(p.negocio+' '+p.ref+' '+(p.lineas||[]).map(l=>l.n).join(' ')).includes(qb))).map(p=>{
@@ -255,9 +281,22 @@ function pintar(){
     <div class="acts">${p.estado!=='anulado'?`<button class="btn pri" data-edit="${p.id}">✏️ Modificar</button>`:''}${p.estado!=='visto'?`<button class="btn" data-id="${p.id}" data-e="visto">Marcar pasado a fábrica</button>`:`<button class="btn" data-id="${p.id}" data-e="nuevo">Volver a nuevo</button>`}
     ${p.estado!=='anulado'?`<button class="btn" data-id="${p.id}" data-e="anulado">Anular</button>`:''}<button class="btn" data-hoja="${p.id}">Hoja del pedido (PDF)</button></div></div>`}).join('')||'<p class="vacio">Todavía no hay pedidos.</p>';
 }
+// anotar lo pedido a fábrica
+$('tprov').addEventListener('change',async e=>{const i=e.target.closest('input[data-fab]');if(!i)return;
+  const v=i.value.trim()===''?null:Math.max(0,Math.round(+i.value.replace(',','.')));
+  if(v!==null&&isNaN(v)){toast('Escribe un número');return}
+  try{await rpc('web_panel_fabrica_guardar',{clave:CLAVE,producto:i.dataset.fab,proveedor:i.dataset.m,cantidad:v});
+    if(v===null)delete FAB[i.dataset.fab];else FAB[i.dataset.fab]=v;pintar();toast('Guardado ✓')}catch(err){toast(err.message)}});
+$('tprov').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.matches('input[data-fab]'))e.target.blur()});
+$('tprov').addEventListener('input',e=>{const b=e.target.closest('.fbus');if(!b)return;const q=norm(b.value).trim(),m=b.dataset.m,res=b.nextElementSibling;
+  if(!q){res.innerHTML='';return}
+  const r=CAT.filter(c=>(PROV.includes(c.m)?c.m:'Otros')===m&&!(FAB[c.id]!=null||FEXTRA.includes(c.id))&&q.split(/\s+/).every(w=>norm(c.n+' '+c.d).includes(w))).slice(0,8);
+  res.innerHTML=r.map(c=>`<button type="button" data-fadd="${esc(c.id)}">＋ ${esc(c.n)} <small>· ${esc(c.d)}</small></button>`).join('')||'<p class="meta">No encuentro ese producto.</p>'});
+$('tprov').addEventListener('click',e=>{const b=e.target.closest('button[data-fadd]');if(!b)return;const k=b.dataset.fadd;FEXTRA.push(k);pintar();
+  const i=$('tprov').querySelector(`input[data-fab="${CSS.escape(k)}"]`);if(i){i.scrollIntoView({block:'center'});i.focus()}});
 $('tprov').addEventListener('click',async e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;const m=b.closest('.prov').dataset.m;
-  const filas=Object.values(totales(visibles())[m]).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es'));let txt=textoProv(m,filas);
+  const filas=Object.values(totales(visibles())[m]||{}).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es'));let txt=textoProv(m,filas);
   if(!$('semana').value){const L=[`*PEDIDO ${m.toUpperCase()} - QUESOS MAHER*`];
     [...new Set(visibles().map(p=>p.entrega))].sort(porDia).forEach(se=>{const T=totales(visibles().filter(p=>p.entrega===se))[m];if(!T)return;
       L.push('',`*${se}*`);Object.values(T).sort((a,b)=>a.l.n.localeCompare(b.l.n,'es')).forEach(t=>L.push(`• ${cant(t.l,t.q)} - ${t.l.n} (${t.l.d})`))});
