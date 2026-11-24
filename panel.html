@@ -252,8 +252,8 @@ function contactoHtml(p){
     ...(p.lineas||[]).map(l=>`• ${cant(l,+l.q)} - ${l.n} (${l.d})`),...(p.obs?['',`Observaciones: ${p.obs}`]:[]),
     '','Si está todo bien, no hace falta que contestes a este mensaje. Si algo no cuadra, dínoslo por aquí y lo cambiamos.','','Si en algún momento necesitas alguna otra cosita, también puedes hacer otro pedido desde este enlace:','https://quesosmaher.vercel.app','','¡Muchas gracias!','Quesos Maher'].join('\n');
   // pedidos sin teléfono (anteriores al cambio): el botón abre WhatsApp para elegir tú el contacto
-  if(!p.telefono)return `<div class="cto"><a class="btn conf" href="https://wa.me/?text=${encodeURIComponent(conf)}" target="_blank" rel="noopener">✅ Confirmar recibido</a><span class="meta sintel">Sin teléfono: elige tú el contacto en WhatsApp</span>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
-  return `<div class="cto"><a class="btn conf" href="https://wa.me/${wa}?text=${encodeURIComponent(conf)}" target="_blank" rel="noopener">✅ Confirmar recibido</a><a class="btn" href="tel:${esc(p.telefono)}">📞 ${esc(p.telefono)}</a><a class="btn" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
+  if(!p.telefono)return `<div class="cto"><a class="btn conf" href="https://wa.me/?text=${encodeURIComponent(conf)}" target="_blank" rel="noopener">✅ Confirmar recibido</a><span class="meta sintel">Sin teléfono: elige tú el contacto en WhatsApp</span><button class="btn" data-tel="${p.id}">✏️ Poner teléfono</button>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
+  return `<div class="cto"><a class="btn conf" href="https://wa.me/${wa}?text=${encodeURIComponent(conf)}" target="_blank" rel="noopener">✅ Confirmar recibido</a><a class="btn" href="tel:${esc(p.telefono)}">📞 ${esc(p.telefono)}</a><a class="btn" href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a><button class="btn" data-tel="${p.id}">✏️ Cambiar teléfono</button>${quien?`<span class="meta">${quien}</span>`:''}</div>`;
 }
 function pintar(){
   const lista=visibles();
@@ -333,6 +333,12 @@ $('tprov').addEventListener('click',async e=>{
   }
 });
 $('tped').addEventListener('input',e=>{if(e.target.id!=='buscar')return;const v=e.target.value,pos=e.target.selectionStart;pintar();const n=$('buscar');n.value=v;n.focus();n.setSelectionRange(pos,pos)});
+// cambiar el teléfono del cliente (p. ej. si el comercial lo apuntó mal)
+$('tped').addEventListener('click',async e=>{const b=e.target.closest('button[data-tel]');if(!b)return;const p=PED.find(x=>x.id===+b.dataset.tel);
+  const v=prompt(`Teléfono de ${p.negocio}:`,p.telefono||'');if(v===null)return;const t=v.trim();
+  if(t&&t.replace(/[^0-9]/g,'').length<9){toast('El teléfono debe tener al menos 9 cifras');return}
+  if(t===(p.telefono||''))return;
+  b.disabled=true;try{await rpc('web_panel_telefono',{clave:CLAVE,pedido:p.id,telefono:t||null});await cargar();toast('Teléfono cambiado ✓')}catch(err){toast(err.message);b.disabled=false}});
 $('tped').addEventListener('click',e=>{const b=e.target.closest('button[data-hoja]');if(!b)return;const p=PED.find(x=>x.id===+b.dataset.hoja);
   imprimir('PEDIDO DE CLIENTE',p.negocio,(p.lineas||[]).map(l=>({l,q:+l.q})),p.entrega,p)});
 $('tped').addEventListener('click',async e=>{
